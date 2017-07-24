@@ -2,7 +2,9 @@
 " Repository:   https://github.com/chrisbra/vim-xml-ftplugin
 " Maintainer:	Christian Brabandt <cb@256bit.org>
 " Previous Maintainer:	Johannes Zellner <johannes@zellner.org>
-" Last Change:	20181022 - Do not overwrite indentkeys setting
+" Last Change:	20181116 - Fix indentation when tags start with a colon or an underscore
+"                          https://github.com/vim/vim/pull/926
+"             	20181022 - Do not overwrite indentkeys setting
 "                          https://github.com/chrisbra/vim-xml-ftplugin/issues/1
 "             	20180724 - Correctly indent xml comments https://github.com/vim/vim/issues/3200
 " Notes:	1) does not indent pure non-xml code (e.g. embedded scripts)
@@ -24,7 +26,7 @@ setlocal indentexpr=XmlIndentGet(v:lnum,1)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,},!^F
 
 if !exists('b:xml_indent_open')
-    let b:xml_indent_open = '.\{-}<\a'
+    let b:xml_indent_open = '.\{-}<[:A-Z_a-z]'
     " pre tag, e.g. <address>
     " let b:xml_indent_open = '.\{-}<[/]\@!\(address\)\@!'
 endif
