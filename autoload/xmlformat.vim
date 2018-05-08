@@ -66,7 +66,7 @@ func! s:Trim(item)
   if exists('*trim')
     return trim(a:item)
   else
-    return matchstr('\S*', a:item)
+    return matchstr(a:item, '\S\+.*')
   endif
 endfunc
 " Check if tag is a new opening tag <tag> {{{1
