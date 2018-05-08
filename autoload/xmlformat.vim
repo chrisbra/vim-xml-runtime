@@ -80,7 +80,7 @@ func! s:Trim(item)
 endfunc
 " Check if tag is a new opening tag <tag> {{{1
 func! s:StartTag(tag)
-  return a:tag =~? '^\s*<[^/]'
+  return a:tag =~? '^\s*<[^/?]'
 endfunc
 " Remove one level of indentation {{{1
 func! s:DecreaseIndent()
