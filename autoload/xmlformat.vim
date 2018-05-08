@@ -30,11 +30,20 @@ func! xmlformat#Format()
       call add(result, s:Indent(item))
     elseif s:EmptyTag(lastitem)
       call add(result, s:Indent(item))
-    elseif s:StartTag(lastitem)
+    elseif s:StartTag(lastitem) && s:IsTag(item)
       let s:indent += 1
       call add(result, s:Indent(item))
      else
-       call add(result, s:Indent(item))
+       if !s:IsTag(item)
+         " Simply split on '<'
+         let t=split(item, '.<\@=\zs')
+         let s:indent+=1
+         call add(result, s:Indent(t[0]))
+         let s:indent = s:DecreaseIndent()
+         call add(result, s:Indent(t[1]))
+       else
+        call add(result, s:Indent(item))
+      endif
      endif
      let lastitem = item
    endfor
@@ -51,7 +60,7 @@ func! xmlformat#Format()
   endif
 
   " do not run internal formatter!
-  return 0 
+  return 0
 endfunc
 " Check if given tag is XML Declaration header {{{1
 func! s:IsXMLDecl(tag)
@@ -80,6 +89,11 @@ endfunc
 " Check if tag is a closing tag </tag> {{{1
 func! s:EndTag(tag)
   return a:tag =~? '^\s*</'
+endfunc
+" Check that the tag is actually a tag and not {{{1
+" something like "foobar</foobar>"
+func! s:IsTag(tag)
+  return s:Trim(a:tag)[0] == '<'
 endfunc
 " Check if tag is empty <tag/> {{{1
 func! s:EmptyTag(tag)
