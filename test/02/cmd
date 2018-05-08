@@ -1,0 +1,1 @@
+vim --clean -c ':so ../../autoload/xmlformat.vim' -c ':set formatexpr=xmlformat#Format() ts=2 sw=0 sts=-1'  -c 'norm! 11ggVgq' -c ':saveas! output.xml' -c ':q!'  input.xml
