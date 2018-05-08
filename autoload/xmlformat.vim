@@ -41,6 +41,12 @@ func! xmlformat#Format()
    if !empty(result)
     exe v:lnum. ",". (v:lnum + v:count - 1). 'd'
     call append(v:lnum - 1, result)
+    " Might need to remove the last line, if it became empty because of the
+    " append() call
+    let last = v:lnum + len(result)
+    if getline(last) is ''
+      exe last. 'd'
+    endif
   endif
 
   " do not run internal formatter!
