@@ -38,8 +38,10 @@ func! xmlformat#Format()
      let lastitem = item
    endfor
 
-   exe v:lnum. ",". (v:lnum + v:count - 1). 'd'
-   call append(v:lnum - 1, result)
+   if !empty(result)
+    exe v:lnum. ",". (v:lnum + v:count - 1). 'd'
+    call append(v:lnum - 1, result)
+  endif
 
   " do not run internal formatter!
   return 0 
