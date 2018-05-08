@@ -18,18 +18,19 @@ set cpo&vim
 " Main function: Format the input {{{1
 func! xmlformat#Format()
   let sw  = shiftwidth()
+  let prev = prevnonblank(v:lnum-1)
+  let s:indent = indent(prev)/sw
   let result = []
-  let lastitem = ''
-  let s:indent = 0
+  let lastitem = prev ? getline(prev) : ''
   let is_xml_decl = 0
   " split on `<`, but don't split on very first opening <
   for item in split(getline(v:lnum), '.\@<=[>]\zs')
     if s:EndTag(item)
-      let s:indent = (s:indent > 0 ? s:indent - 1 : 0)
+      let s:indent = s:DecreaseIndent()
       call add(result, s:Indent(item))
     elseif s:EmptyTag(lastitem)
       call add(result, s:Indent(item))
-    elseif s:StartTag(lastitem) && !s:IsXMLDecl(lastitem)
+    elseif s:StartTag(lastitem)
       let s:indent += 1
       call add(result, s:Indent(item))
      else
@@ -58,11 +59,23 @@ func! s:IsXMLDecl(tag)
 endfunc
 " Return tag indented by current level {{{1
 func! s:Indent(item)
-  return repeat(' ', shiftwidth()*s:indent).a:item
+  return repeat(' ', shiftwidth()*s:indent). s:Trim(a:item)
 endfu
+" Return item trimmed from leading whitespace {{{1
+func! s:Trim(item)
+  if exists('*trim')
+    return trim(a:item)
+  else
+    return matchstr('\S*', a:item)
+  endif
+endfunc
 " Check if tag is a new opening tag <tag> {{{1
 func! s:StartTag(tag)
   return a:tag =~? '^\s*<[^/]'
+endfunc
+" Remove one level of indentation {{{1
+func! s:DecreaseIndent()
+  return (s:indent > 0 ? s:indent - 1 : 0)
 endfunc
 " Check if tag is a closing tag </tag> {{{1
 func! s:EndTag(tag)
