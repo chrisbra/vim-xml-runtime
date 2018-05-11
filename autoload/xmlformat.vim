@@ -17,6 +17,12 @@ set cpo&vim
 
 " Main function: Format the input {{{1
 func! xmlformat#Format()
+  " only allow reformatting through the gq command
+  " (e.g. Vim is in normal mode)
+  if mode() != 'n'
+    " do not fall back to internal formatting
+    return 0
+  endif
   let sw  = shiftwidth()
   let prev = prevnonblank(v:lnum-1)
   let s:indent = indent(prev)/sw
