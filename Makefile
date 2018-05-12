@@ -1,7 +1,10 @@
-
+PLUGIN=$(shell basename "$$PWD")
 .PHONY: test
 
-all: test
+all: zip
+
+zip:
+	@rm -f $(PLUGIN).zip; zip $(PLUGIN).zip ftplugin/*.vim autoload/*.vim
 
 test:
 	cd test && ./test.sh
