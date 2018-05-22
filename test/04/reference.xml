@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AuftragKomplett FROM="90700" TO="P360" xmlns="http://www.evelopment.de/schema/AuftragKomplett">
+  <foobar>
+    eins zwei drei
+  </foobar>
+  <Bestellung BestellungStatus="1" ExternalID="5761230" ID="?" Neuanlage="2016-04-13T10:00:00.0" Exportiert="2018-05-07T17:27:09.490" LetzteAenderung="2018-05-07T17:27:09.490" Auftragsart="0" Auftragsreferenz="Online-Auftrag: 5761230" Medium="1" Origin="?" Affiliate="?" Versandwunsch="Standard">
+    <Kundenbeziehung ExternalID="20001082" Typ="1" Vertriebsweg="2" ID="?" Exportiert="2018-05-07T17:27:09.521" Nummer="20001082">
+      <Standards>
+        <StdLieferanschrift StdLieferanschriftID="?" StdLieferanschriftExternalID="5761230_L"/>
+        <StdRechnungsanschrift StdRechnungsanschriftID="?" StdRechnungsanschriftExternalID="5761230_R"/>
+        <StdKataloganschrift StdKataloganschriftID="?" StdKataloganschriftExternalID="5761230_K"/>
+        <StdZahlungskanal StdZahlungskanalID="?" StdZahlungskanalExternalID="ZD_5761230"/>
+      </Standards>
+      <Vertragspartner>
+        <Person ID="?" ExternalID="8300079_1" Nachname="Original" Vorname="Bill" Geburtstag="1977-01-01T00:00:00.000" Anrede="0"/>
+      </Vertragspartner>
+      <KommunikationskanalListe>
+        <Strassenadresse Nummer="99" Strasse="Lieferstrasse " Land="DE" Ort="Lieferdorf" Postleitzahl="54321" ExternalID="5761230_L" ID="?"/>
+        <Strassenadresse Nummer="10" Strasse="Billingstraße " Land="DE" Ort="Billingcity" Postleitzahl="12345" ExternalID="5761230_R" ID="?"/>
+        <Strassenadresse Nummer="10" Strasse="Billingstraße " Land="DE" Ort="Billingcity" Postleitzahl="12345" ExternalID="5761230_K" ID="?"/>
+        <EmailAdresse Adresse="originalbill@demotest.com" ExternalID="EMAIL_5761230" ID="?"/>
+      </KommunikationskanalListe>
+      <ZahlungskanalListe>
+        <Dienstleister ID="?" ExternalID="ZD_5761230" OP="Update"/>
+      </ZahlungskanalListe>
+    </Kundenbeziehung>
+    <Zahlungsart TransaktionsNr="5761230" Dienstleister="85" Betrag="274.92" ID="?" ExternalID="ZD_5761230"/>
+    <Bestellartikelposition ID="?" ExternalID="POS_5761230_1" Lieferartikelnummer="29462612" Groesse="?" Katalogkennzeichen="?" Katalognummer="4712" Menge="1" Einzelpreis="274.92" PositionsNummer="1"/>
+    <Bestellartikelposition ID="?" ExternalID="POS_5761230_2" Lieferartikelnummer="29462629" Groesse="?" Katalogkennzeichen="?" Katalognummer="4712" Menge="1" Einzelpreis="0.00" PositionsNummer="2"/>
+  </Bestellung>
+</AuftragKomplett>
