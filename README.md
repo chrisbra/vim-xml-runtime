@@ -1,5 +1,12 @@
 # vim-xml-ftplugin
-Vim filetype script for XML
+Vim xml runtime files
+
+The official XML runtime files for Vim. They include:
+* XML [filetype plugin][1]
+* XML [indent script][2]
+* XML [format script][3]
+
+Once in a while, a snapshot from here will be send to Bram for inclusion and distribution with [Vim][4]
 
 This filetype plugin contains an xmlformatting plugin in the autoload directory:
 
@@ -25,3 +32,7 @@ Then reformat using `gq`
 
 __NO WARRANTY, EXPRESS OR IMPLIED.  USE AT-YOUR-OWN-RISK__
 
+[1]: https://github.com/chrisbra/vim-xml-ftplugin/blob/master/ftplugin/xml.vim
+[2]: https://github.com/chrisbra/vim-xml-ftplugin/blob/master/indent/xml.vim
+[3]: https://github.com/chrisbra/vim-xml-ftplugin/blob/master/autoload/xmlformat.vim
+[4]: https://www.github.com/vim/vim
