@@ -87,6 +87,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
     if lnum == 0
 	return 0
     endif
+    let syn_name = ''
 
     if a:use_syntax_check
 	let check_lnum = <SID>XmlIndentSynCheck(lnum)
@@ -96,6 +97,11 @@ fun! XmlIndentGet(lnum, use_syntax_check)
 	elseif -1 == check_lnum || -1 == check_alnum
 	    return -1
 	endif
+        let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
+    endif
+
+    if syn_name =~ 'Comment'
+      return <SID>XmlIndentComment(a:lnum, lnum)
     endif
 
     let ind = <SID>XmlIndentSum(lnum, -1, indent(lnum))
@@ -103,6 +109,27 @@ fun! XmlIndentGet(lnum, use_syntax_check)
 
     return ind
 endfun
+
+" return indent for a commented line,
+" the middle part might be indented on additional level
+func! <SID>XmlIndentComment(lnum, plnum)
+    let _wsv = winsaveview()
+    call cursor(a:lnum, 1)
+    try
+      if getline(a:lnum) =~ '<!--'
+          " start of comment, add one indentation level
+          return indent(a:plnum) + shiftwidth()
+      elseif getline(a:lnum) =~ '-->'
+        " end of comment, same as start of comment
+          return indent(search('<!--', 'bnw'))
+      else
+        " middle part of comment, add one additional level
+          return indent(search('<!--', 'bnw')) + shiftwidth()
+      endif
+    finally
+      call winrestview(_wsv)
+    endtry
+endfunc
 
 let &cpo = s:keepcpo
 unlet s:keepcpo
