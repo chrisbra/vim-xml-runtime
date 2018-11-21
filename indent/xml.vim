@@ -81,16 +81,16 @@ endfun
 
 fun! XmlIndentGet(lnum, use_syntax_check)
     " Find a non-empty line above the current line.
-    let lnum = prevnonblank(a:lnum - 1)
+    let plnum = prevnonblank(a:lnum - 1)
 
     " Hit the start of the file, use zero indent.
-    if lnum == 0
+    if plnum == 0
 	return 0
     endif
     let syn_name = ''
 
     if a:use_syntax_check
-	let check_lnum = <SID>XmlIndentSynCheck(lnum)
+	let check_lnum = <SID>XmlIndentSynCheck(plnum)
 	let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
 	if 0 == check_lnum || 0 == check_alnum
 	    return indent(a:lnum)
@@ -101,10 +101,10 @@ fun! XmlIndentGet(lnum, use_syntax_check)
     endif
 
     if syn_name =~ 'Comment'
-      return <SID>XmlIndentComment(a:lnum, lnum)
+      return <SID>XmlIndentComment(a:lnum, plnum)
     endif
 
-    let ind = <SID>XmlIndentSum(lnum, -1, indent(lnum))
+    let ind = <SID>XmlIndentSum(plnum, -1, indent(plnum))
     let ind = <SID>XmlIndentSum(a:lnum, 0, ind)
 
     return ind
