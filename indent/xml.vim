@@ -79,9 +79,12 @@ fun! <SID>XmlIndentSum(lnum, style, add)
   endif
 endfun
 
+" Main indent function
 fun! XmlIndentGet(lnum)
   " Find a non-empty line above the current line.
   let plnum = prevnonblank(a:lnum - 1)
+  " Find previous line with a tag (regardless whether open or closed)
+  let ptag = search('.\{-}<[/:A-Z_a-z]', 'bnw')
 
   " Hit the start of the file, use zero indent.
   if plnum == 0
@@ -100,7 +103,9 @@ fun! XmlIndentGet(lnum)
     return <SID>XmlIndentComment(a:lnum)
   endif
 
-  let ind = <SID>XmlIndentSum(plnum, -1, indent(plnum))
+  " Get indent from previous tag line
+  let ind = <SID>XmlIndentSum(ptag, -1, indent(ptag))
+  " Determine indent from current line
   let ind = <SID>XmlIndentSum(a:lnum, 0, ind)
 
   return ind
