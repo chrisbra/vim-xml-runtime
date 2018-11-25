@@ -102,6 +102,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
 
     if syn_name =~ 'Comment'
       return <SID>XmlIndentComment(a:lnum)
+    endif
 
     let ind = <SID>XmlIndentSum(plnum, -1, indent(plnum))
     let ind = <SID>XmlIndentSum(a:lnum, 0, ind)
@@ -133,4 +134,4 @@ endfunc
 let &cpo = s:keepcpo
 unlet s:keepcpo
 
-" vim:ts=8
+" vim:ts=4
