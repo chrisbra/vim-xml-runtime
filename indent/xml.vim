@@ -26,15 +26,15 @@ setlocal indentexpr=XmlIndentGet(v:lnum,1)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,},!^F
 
 if !exists('b:xml_indent_open')
-    let b:xml_indent_open = '.\{-}<[:A-Z_a-z]'
-    " pre tag, e.g. <address>
-    " let b:xml_indent_open = '.\{-}<[/]\@!\(address\)\@!'
+  let b:xml_indent_open = '.\{-}<[:A-Z_a-z]'
+  " pre tag, e.g. <address>
+  " let b:xml_indent_open = '.\{-}<[/]\@!\(address\)\@!'
 endif
 
 if !exists('b:xml_indent_close')
-    let b:xml_indent_close = '.\{-}</'
-    " end pre tag, e.g. </address>
-    " let b:xml_indent_close = '.\{-}</\(address\)\@!'
+  let b:xml_indent_close = '.\{-}</'
+  " end pre tag, e.g. </address>
+  " let b:xml_indent_close = '.\{-}</\(address\)\@!'
 endif
 
 let &cpo = s:keepcpo
@@ -49,89 +49,89 @@ let s:keepcpo= &cpo
 set cpo&vim
 
 fun! <SID>XmlIndentWithPattern(line, pat)
-    let s = substitute('x'.a:line, a:pat, "\1", 'g')
-    return strlen(substitute(s, "[^\1].*$", '', ''))
+  let s = substitute('x'.a:line, a:pat, "\1", 'g')
+  return strlen(substitute(s, "[^\1].*$", '', ''))
 endfun
 
 " [-- check if it's xml --]
 fun! <SID>XmlIndentSynCheck(lnum)
-    if '' != &syntax
-	let syn1 = synIDattr(synID(a:lnum, 1, 1), 'name')
-	let syn2 = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
-	if '' != syn1 && syn1 !~ 'xml' && '' != syn2 && syn2 !~ 'xml'
-	    " don't indent pure non-xml code
-	    return 0
-	endif
+  if '' != &syntax
+    let syn1 = synIDattr(synID(a:lnum, 1, 1), 'name')
+    let syn2 = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
+    if '' != syn1 && syn1 !~ 'xml' && '' != syn2 && syn2 !~ 'xml'
+      " don't indent pure non-xml code
+      return 0
     endif
-    return 1
+  endif
+  return 1
 endfun
 
 " [-- return the sum of indents of a:lnum --]
 fun! <SID>XmlIndentSum(lnum, style, add)
-    let line = getline(a:lnum)
-    if a:style == match(line, '^\s*</')
-	return (shiftwidth() *
-	\  (<SID>XmlIndentWithPattern(line, b:xml_indent_open)
-	\ - <SID>XmlIndentWithPattern(line, b:xml_indent_close)
-	\ - <SID>XmlIndentWithPattern(line, '.\{-}/>'))) + a:add
-    else
-	return a:add
-    endif
+  let line = getline(a:lnum)
+  if a:style == match(line, '^\s*</')
+    return (shiftwidth() *
+    \  (<SID>XmlIndentWithPattern(line, b:xml_indent_open)
+    \ - <SID>XmlIndentWithPattern(line, b:xml_indent_close)
+    \ - <SID>XmlIndentWithPattern(line, '.\{-}/>'))) + a:add
+  else
+    return a:add
+  endif
 endfun
 
 fun! XmlIndentGet(lnum, use_syntax_check)
-    " Find a non-empty line above the current line.
-    let plnum = prevnonblank(a:lnum - 1)
+  " Find a non-empty line above the current line.
+  let plnum = prevnonblank(a:lnum - 1)
 
-    " Hit the start of the file, use zero indent.
-    if plnum == 0
-	return 0
+  " Hit the start of the file, use zero indent.
+  if plnum == 0
+    return 0
+  endif
+  let syn_name = ''
+
+  if a:use_syntax_check
+    let check_lnum = <SID>XmlIndentSynCheck(plnum)
+    let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
+    if 0 == check_lnum || 0 == check_alnum
+      return indent(a:lnum)
+    elseif -1 == check_lnum || -1 == check_alnum
+      return -1
     endif
-    let syn_name = ''
+    let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
+  endif
 
-    if a:use_syntax_check
-	let check_lnum = <SID>XmlIndentSynCheck(plnum)
-	let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
-	if 0 == check_lnum || 0 == check_alnum
-	    return indent(a:lnum)
-	elseif -1 == check_lnum || -1 == check_alnum
-	    return -1
-	endif
-        let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
-    endif
+  if syn_name =~ 'Comment'
+    return <SID>XmlIndentComment(a:lnum)
+  endif
 
-    if syn_name =~ 'Comment'
-      return <SID>XmlIndentComment(a:lnum)
-    endif
+  let ind = <SID>XmlIndentSum(plnum, -1, indent(plnum))
+  let ind = <SID>XmlIndentSum(a:lnum, 0, ind)
 
-    let ind = <SID>XmlIndentSum(plnum, -1, indent(plnum))
-    let ind = <SID>XmlIndentSum(a:lnum, 0, ind)
-
-    return ind
+  return ind
 endfun
 
 " return indent for a commented line,
 " the middle part might be indented on additional level
 func! <SID>XmlIndentComment(lnum)
-    let _wsv = winsaveview()
-    call cursor(a:lnum, 1)
-    try
-      if getline(a:lnum) =~ '<!--'
-          " start of comment, add one indentation level
-          return indent(search(b:xml_indent_open, 'bnw')) + shiftwidth()
-      elseif getline(a:lnum) =~ '-->'
-        " end of comment, same as start of comment
-          return indent(search('<!--', 'bnw'))
-      else
-        " middle part of comment, add one additional level
-          return indent(search('<!--', 'bnw')) + shiftwidth()
-      endif
-    finally
-      call winrestview(_wsv)
-    endtry
+  let _wsv = winsaveview()
+  call cursor(a:lnum, 1)
+  try
+    if getline(a:lnum) =~ '<!--'
+      " start of comment, add one indentation level
+      return indent(search(b:xml_indent_open, 'bnw')) + shiftwidth()
+    elseif getline(a:lnum) =~ '-->'
+    " end of comment, same as start of comment
+      return indent(search('<!--', 'bnw'))
+    else
+    " middle part of comment, add one additional level
+      return indent(search('<!--', 'bnw')) + shiftwidth()
+    endif
+  finally
+    call winrestview(_wsv)
+  endtry
 endfunc
 
 let &cpo = s:keepcpo
 unlet s:keepcpo
 
-" vim:ts=4
+" vim:ts=2 et sts=-1 sw=0
