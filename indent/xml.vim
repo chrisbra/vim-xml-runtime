@@ -114,22 +114,25 @@ endfun
 " return indent for a commented line,
 " the middle part might be indented on additional level
 func! <SID>XmlIndentComment(lnum)
-  let _wsv = winsaveview()
-  call cursor(a:lnum, 1)
-  try
-    if getline(a:lnum) =~ '<!--'
-      " start of comment, add one indentation level
-      return indent(search(b:xml_indent_open, 'bnw')) + shiftwidth()
-    elseif getline(a:lnum) =~ '-->'
-    " end of comment, same as start of comment
-      return indent(search('<!--', 'bnw'))
+  let ptagopen = search(b:xml_indent_open, 'bnw')
+  let ptagclose = search(b:xml_indent_close, 'bnw')
+
+  if getline(a:lnum) =~ '<!--'
+    " if previous tag was a closing tag, do not add
+    " one additional level of indent
+    if ptagclose > ptagopen && a:lnum > ptagclose
+      return indent(ptagclose)
     else
-    " middle part of comment, add one additional level
-      return indent(search('<!--', 'bnw')) + shiftwidth()
+      " start of comment, add one indentation level
+      return indent(ptagopen) + shiftwidth()
     endif
-  finally
-    call winrestview(_wsv)
-  endtry
+  elseif getline(a:lnum) =~ '-->'
+  " end of comment, same as start of comment
+    return indent(search('<!--', 'bnw'))
+  else
+  " middle part of comment, add one additional level
+    return indent(search('<!--', 'bnw')) + shiftwidth()
+  endif
 endfunc
 
 let &cpo = s:keepcpo
