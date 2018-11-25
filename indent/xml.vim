@@ -22,7 +22,7 @@ let s:keepcpo= &cpo
 set cpo&vim
 
 " [-- local settings (must come before aborting the script) --]
-setlocal indentexpr=XmlIndentGet(v:lnum,1)
+setlocal indentexpr=XmlIndentGet(v:lnum)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,},!^F
 
 if !exists('b:xml_indent_open')
@@ -55,10 +55,10 @@ endfun
 
 " [-- check if it's xml --]
 fun! <SID>XmlIndentSynCheck(lnum)
-  if '' != &syntax
+  if &syntax != ''
     let syn1 = synIDattr(synID(a:lnum, 1, 1), 'name')
     let syn2 = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
-    if '' != syn1 && syn1 !~ 'xml' && '' != syn2 && syn2 !~ 'xml'
+    if syn1 != '' && syn1 !~ 'xml' && syn2 != '' && syn2 !~ 'xml'
       " don't indent pure non-xml code
       return 0
     endif
@@ -79,7 +79,7 @@ fun! <SID>XmlIndentSum(lnum, style, add)
   endif
 endfun
 
-fun! XmlIndentGet(lnum, use_syntax_check)
+fun! XmlIndentGet(lnum)
   " Find a non-empty line above the current line.
   let plnum = prevnonblank(a:lnum - 1)
 
@@ -89,16 +89,12 @@ fun! XmlIndentGet(lnum, use_syntax_check)
   endif
   let syn_name = ''
 
-  if a:use_syntax_check
-    let check_lnum = <SID>XmlIndentSynCheck(plnum)
-    let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
-    if 0 == check_lnum || 0 == check_alnum
-      return indent(a:lnum)
-    elseif -1 == check_lnum || -1 == check_alnum
-      return -1
-    endif
-    let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
+  let check_lnum = <SID>XmlIndentSynCheck(plnum)
+  let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
+  if check_lnum == 0 || check_alnum == 0
+    return indent(a:lnum)
   endif
+  let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
 
   if syn_name =~ 'Comment'
     return <SID>XmlIndentComment(a:lnum)
