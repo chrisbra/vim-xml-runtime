@@ -1,13 +1,17 @@
-" Language:	xml
-" Repository:   https://github.com/chrisbra/vim-xml-ftplugin
-" Maintainer:	Christian Brabandt <cb@256bit.org>
+"     Language:	xml
+"   Repository: https://github.com/chrisbra/vim-xml-ftplugin
+" Last Changed: Dec 07th, 2018
+"   Maintainer:	Christian Brabandt <cb@256bit.org>
 " Previous Maintainer:	Johannes Zellner <johannes@zellner.org>
-" Last Change:	20181116 - Fix indentation when tags start with a colon or an underscore
-"                          https://github.com/vim/vim/pull/926
-"             	20181022 - Do not overwrite indentkeys setting
-"                          https://github.com/chrisbra/vim-xml-ftplugin/issues/1
-"             	20180724 - Correctly indent xml comments https://github.com/vim/vim/issues/3200
-" Notes:	1) does not indent pure non-xml code (e.g. embedded scripts)
+" Last Change:
+" 20181116 - Fix indentation when tags start with a colon or an underscore
+"            https://github.com/vim/vim/pull/926
+" 20181022 - Do not overwrite indentkeys setting
+"            https://github.com/chrisbra/vim-xml-ftplugin/issues/1
+" 20180724 - Correctly indent xml comments https://github.com/vim/vim/issues/3200
+"
+" Notes:
+"   1) does not indent pure non-xml code (e.g. embedded scripts)
 "		2) will be confused by unbalanced tags in comments
 "		or CDATA sections.
 "		2009-05-26 patch by Nikolai Weibull
