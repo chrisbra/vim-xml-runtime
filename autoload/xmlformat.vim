@@ -85,7 +85,11 @@ func! s:Trim(item)
 endfunc
 " Check if tag is a new opening tag <tag> {{{1
 func! s:StartTag(tag)
-  return a:tag =~? '^\s*<[^/?]'
+  let is_comment = s:IsComment(a:tag)
+  return a:tag =~? '^\s*<[^/?]' && !is_comment
+endfunc
+func! s:IsComment(tag)
+  return a:tag =~? '<!--'
 endfunc
 " Remove one level of indentation {{{1
 func! s:DecreaseIndent()
