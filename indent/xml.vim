@@ -26,7 +26,8 @@ let s:keepcpo= &cpo
 set cpo&vim
 
 " [-- local settings (must come before aborting the script) --]
-setlocal indentexpr=XmlIndentGet(v:lnum)
+" Attention: Parameter use_syntax_check is used by the docbk.vim indent script
+setlocal indentexpr=XmlIndentGet(v:lnum,1)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,},!^F
 
 if !exists('b:xml_indent_open')
@@ -84,7 +85,7 @@ fun! <SID>XmlIndentSum(lnum, style, add)
 endfun
 
 " Main indent function
-fun! XmlIndentGet(lnum)
+fun! XmlIndentGet(lnum, use_syntax_check)
     " Find a non-empty line above the current line.
     let plnum = prevnonblank(a:lnum - 1)
     " Find previous line with a tag (regardless whether open or closed)
@@ -96,12 +97,14 @@ fun! XmlIndentGet(lnum)
     endif
     let syn_name = ''
 
-    let check_lnum = <SID>XmlIndentSynCheck(plnum)
-    let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
-    if check_lnum == 0 || check_alnum == 0
-        return indent(a:lnum)
+    if a:use_syntax_check
+        let check_lnum = <SID>XmlIndentSynCheck(plnum)
+        let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
+        if check_lnum == 0 || check_alnum == 0
+            return indent(a:lnum)
+        endif
+        let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
     endif
-    let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
 
     if syn_name =~ 'Comment'
         return <SID>XmlIndentComment(a:lnum)
