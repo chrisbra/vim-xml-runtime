@@ -88,8 +88,13 @@ endfun
 fun! XmlIndentGet(lnum, use_syntax_check)
     " Find a non-empty line above the current line.
     let plnum = prevnonblank(a:lnum - 1)
-    " Find previous line with a tag (regardless whether open or closed)
+    " Find previous line with a tag (regardless whether open or closed,
+    " but always start searching backwards from the start of the line,
+    " so the current line is not found).
+    let curpos = getpos('.')
+    call cursor(curpos[1], 1)
     let ptag = search('.\{-}<[/:A-Z_a-z]', 'bnw')
+    call setpos(curpos, '.')
 
     " Hit the start of the file, use zero indent.
     if plnum == 0
