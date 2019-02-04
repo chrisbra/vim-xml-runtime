@@ -76,6 +76,13 @@ endfun
 " [-- return the sum of indents of a:lnum --]
 fun! <SID>XmlIndentSum(lnum, style, add)
     let line = getline(a:lnum)
+    if line !~ '^\s*<'
+        " no complete tag, assume additional indent level
+        return shiftwidth() + a:add
+    elseif line !~ '>'
+        " no complete tag, return initial indent
+        return a:add
+    endif
     if a:style == match(line, '^\s*</')
         return (shiftwidth() *
         \  (<SID>XmlIndentWithPattern(line, b:xml_indent_open)
@@ -95,8 +102,14 @@ fun! XmlIndentGet(lnum, use_syntax_check)
     endif
     " Find previous line with a tag (regardless whether open or closed,
     " but always start restrict the match to a line before the current one
+    " Note: xml declaration: <?xml version="1.0"?>
+    "       won't be found, as it is not a legal tag name
     let ptag_pattern = '\%(.\{-}<[/:A-Z_a-z]\)'. '\%(\&\%<'. line('.').'l\)'
-    let ptag = search(ptag_pattern, 'bnw')
+    let ptag = search(ptag_pattern, 'bnW')
+    " no previous tag
+    if ptag == 0
+        return 0
+    endif
 
     let syn_name = ''
     if a:use_syntax_check
