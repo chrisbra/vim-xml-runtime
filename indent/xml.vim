@@ -89,9 +89,8 @@ endfun
 " Main indent function
 fun! XmlIndentGet(lnum, use_syntax_check)
     " Find a non-empty line above the current line.
-    let plnum = prevnonblank(a:lnum - 1)
-    " Hit the start of the file, use zero indent.
-    if plnum == 0
+    if prevnonblank(a:lnum - 1) == 0
+        " Hit the start of the file, use zero indent.
         return 0
     endif
     " Find previous line with a tag (regardless whether open or closed,
@@ -101,7 +100,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
 
     let syn_name = ''
     if a:use_syntax_check
-        let check_lnum = <SID>XmlIndentSynCheck(plnum)
+        let check_lnum = <SID>XmlIndentSynCheck(ptag)
         let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
         if check_lnum == 0 || check_alnum == 0
             return indent(a:lnum)
