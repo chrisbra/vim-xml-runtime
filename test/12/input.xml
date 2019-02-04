@@ -1,0 +1,5 @@
+<some>
+    <tag>With some content
+            in multiline</tag>
+                <another-tag />
+            </some>

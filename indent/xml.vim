@@ -74,20 +74,20 @@ fun! <SID>XmlIndentSynCheck(lnum)
 endfun
 
 " [-- return the sum of indents of a:lnum --]
-fun! <SID>XmlIndentSum(lnum, style, add)
-    let line = getline(a:lnum)
-    if line !~ '^\s*<'
-        " no complete tag, assume additional indent level
-        return shiftwidth() + a:add
-    elseif line !~ '>'
+fun! <SID>XmlIndentSum(line, style, add)
+    if <SID>IsXMLContinuation(a:line) && a:style == 0
+        " no complete tag, add one additional indent level
+        " but only for the current line
+        return a:add + shiftwidth()
+    elseif <SID>HasNoTagEnd(a:line)
         " no complete tag, return initial indent
         return a:add
     endif
-    if a:style == match(line, '^\s*</')
+    if a:style == match(a:line, '^\s*</')
         return (shiftwidth() *
-        \  (<SID>XmlIndentWithPattern(line, b:xml_indent_open)
-        \ - <SID>XmlIndentWithPattern(line, b:xml_indent_close)
-        \ - <SID>XmlIndentWithPattern(line, '.\{-}/>'))) + a:add
+        \  (<SID>XmlIndentWithPattern(a:line, b:xml_indent_open)
+        \ - <SID>XmlIndentWithPattern(a:line, b:xml_indent_close)
+        \ - <SID>XmlIndentWithPattern(a:line, '.\{-}/>'))) + a:add
     else
         return a:add
     endif
@@ -125,12 +125,25 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         return <SID>XmlIndentComment(a:lnum)
     endif
 
+    let pline = getline(ptag)
+    let pind  = indent(ptag)
     " Get indent from previous tag line
-    let ind = <SID>XmlIndentSum(ptag, -1, indent(ptag))
+    let ind = <SID>XmlIndentSum(pline, -1, pind)
+    let t_ind = ind
     " Determine indent from current line
-    let ind = <SID>XmlIndentSum(a:lnum, 0, ind)
+    let ind = <SID>XmlIndentSum(getline(a:lnum), 0, ind)
     return ind
 endfun
+
+func! <SID>IsXMLContinuation(line)
+    " Checks, whether or not the line matches a start-of-tag
+    return a:line !~ '^\s*<'
+endfunc
+
+func! <SID>HasNoTagEnd(line)
+    " Checks whether or not the line matches '>' (so finishes a tag)
+    return a:line !~ '>\s*$'
+endfunc
 
 " return indent for a commented line,
 " the middle part might be indented on additional level
