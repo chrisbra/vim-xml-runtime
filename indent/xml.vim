@@ -135,8 +135,8 @@ endfun
 " return indent for a commented line,
 " the middle part might be indented on additional level
 func! <SID>XmlIndentComment(lnum)
-    let ptagopen = search(b:xml_indent_open, 'bnw')
-    let ptagclose = search(b:xml_indent_close, 'bnw')
+    let ptagopen = search(b:xml_indent_open, 'bnW')
+    let ptagclose = search(b:xml_indent_close, 'bnW')
     if getline(a:lnum) =~ '<!--'
         " if previous tag was a closing tag, do not add
         " one additional level of indent
@@ -148,10 +148,10 @@ func! <SID>XmlIndentComment(lnum)
         endif
     elseif getline(a:lnum) =~ '-->'
         " end of comment, same as start of comment
-        return indent(search('<!--', 'bnw'))
+        return indent(search('<!--', 'bnW'))
     else
         " middle part of comment, add one additional level
-        return indent(search('<!--', 'bnw')) + shiftwidth()
+        return indent(search('<!--', 'bnW')) + shiftwidth()
     endif
 endfunc
 
