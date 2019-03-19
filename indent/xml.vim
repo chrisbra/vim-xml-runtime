@@ -1,9 +1,11 @@
 "     Language: xml
 "   Repository: https://github.com/chrisbra/vim-xml-ftplugin
-" Last Changed: Jan 28, 2019
+" Last Changed: Feb 04, 2019
 "   Maintainer: Christian Brabandt <cb@256bit.org>
 " Previous Maintainer:  Johannes Zellner <johannes@zellner.org>
 " Last Change:
+" 20190204 - correctly handle wrap tags
+"            https://github.com/chrisbra/vim-xml-ftplugin/issues/5
 " 20190128 - Make sure to find previous tag
 "            https://github.com/chrisbra/vim-xml-ftplugin/issues/4
 " 20181116 - Fix indentation when tags start with a colon or an underscore
