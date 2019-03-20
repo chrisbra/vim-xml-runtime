@@ -103,7 +103,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         return 0
     endif
     " Find previous line with a tag (regardless whether open or closed,
-    " but always start restrict the match to a line before the current one
+    " but always restrict the match to a line before the current one
     " Note: xml declaration: <?xml version="1.0"?>
     "       won't be found, as it is not a legal tag name
     let ptag_pattern = '\%(.\{-}<[/:A-Z_a-z]\)'. '\%(\&\%<'. line('.').'l\)'
