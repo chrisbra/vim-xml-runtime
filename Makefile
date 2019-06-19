@@ -7,7 +7,7 @@ zip:
 	@rm -f $(PLUGIN).zip; zip $(PLUGIN).zip ftplugin/*.vim indent/*.vim autoload/*.vim
 
 test:
-	cd test && ./test.sh && cd .. && $(MAKE) clean >/dev/null
+	cd test && ./test.sh -v && cd .. && $(MAKE) clean >/dev/null
 
 clean:
 	find . -type f -name "output.xml" -delete -o -name "*.swp" -delete
