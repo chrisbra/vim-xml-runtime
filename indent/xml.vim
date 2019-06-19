@@ -115,18 +115,24 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         return 0
     endif
 
-    let syn_name = ''
+    let syn_name_start = '' " Syntax element at start of line (excluding whitespace)
+    let syn_name_end = ''   " Syntax element at end of line
+    let curline = getline(a:lnum)
     if a:use_syntax_check
         let check_lnum = <SID>XmlIndentSynCheck(ptag)
         let check_alnum = <SID>XmlIndentSynCheck(a:lnum)
         if check_lnum == 0 || check_alnum == 0
             return indent(a:lnum)
         endif
-        let syn_name = synIDattr(synID(a:lnum, strlen(getline(a:lnum)) - 1, 1), 'name')
+        let syn_name_end   = synIDattr(synID(a:lnum, strlen(curline) - 1, 1), 'name')
+        let syn_name_start = synIDattr(synID(a:lnum, match(curline, '\S') + 1, 1), 'name')
     endif
 
-    if syn_name =~ 'Comment'
+    if syn_name_end =~ 'Comment'
         return <SID>XmlIndentComment(a:lnum)
+    elseif empty(syn_name_start) && empty(syn_name_end)
+        " non-xml tag content: use indent from 'autoindent'
+        return -1
     endif
 
     let pline = getline(ptag)
