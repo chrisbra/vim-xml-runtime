@@ -33,6 +33,8 @@ set cpo&vim
 " Attention: Parameter use_syntax_check is used by the docbk.vim indent script
 setlocal indentexpr=XmlIndentGet(v:lnum,1)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,},!^F
+" autoindent: used when the indentexpr returns -1
+setlocal autoindent
 
 if !exists('b:xml_indent_open')
     let b:xml_indent_open = '.\{-}<[:A-Z_a-z]'
