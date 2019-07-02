@@ -139,9 +139,8 @@ fun! XmlIndentGet(lnum, use_syntax_check)
     let pind  = indent(ptag)
     " Get indent from previous tag line
     let ind = <SID>XmlIndentSum(pline, -1, pind)
-    let t_ind = ind
     " Determine indent from current line
-    let ind = <SID>XmlIndentSum(getline(a:lnum), 0, ind)
+    let ind = <SID>XmlIndentSum(curline, 0, ind)
     return ind
 endfun
 
