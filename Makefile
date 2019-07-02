@@ -1,7 +1,7 @@
 PLUGIN=$(shell basename "$$PWD")
 .PHONY: test submit
 
-all: zip
+all: test
 
 zip:
 	@rm -f $(PLUGIN).zip; zip $(PLUGIN).zip ftplugin/*.vim indent/*.vim autoload/*.vim
