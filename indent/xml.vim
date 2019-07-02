@@ -128,7 +128,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         let syn_name_start = synIDattr(synID(a:lnum, match(curline, '\S') + 1, 1), 'name')
     endif
 
-    if syn_name_end =~ 'Comment'
+    if syn_name_end =~ 'Comment' && syn_name_start =~ 'Comment'
         return <SID>XmlIndentComment(a:lnum)
     elseif empty(syn_name_start) && empty(syn_name_end)
         " non-xml tag content: use indent from 'autoindent'
@@ -156,7 +156,7 @@ func! <SID>HasNoTagEnd(line)
 endfunc
 
 " return indent for a commented line,
-" the middle part might be indented on additional level
+" the middle part might be indented one additional level
 func! <SID>XmlIndentComment(lnum)
     let ptagopen = search(b:xml_indent_open, 'bnW')
     let ptagclose = search(b:xml_indent_close, 'bnW')
