@@ -108,7 +108,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
     " but always restrict the match to a line before the current one
     " Note: xml declaration: <?xml version="1.0"?>
     "       won't be found, as it is not a legal tag name
-    let ptag_pattern = '\%(.\{-}<[/:A-Z_a-z]\)'. '\%(\&\%<'. line('.').'l\)'
+    let ptag_pattern = '\%(.\{-}<[/:A-Z_a-z]\)'. '\%(\&\%<'. a:lnum .'l\)'
     let ptag = search(ptag_pattern, 'bnW')
     " no previous tag
     if ptag == 0
