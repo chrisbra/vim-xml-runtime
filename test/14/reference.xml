@@ -1,10 +1,10 @@
 <root>
   <request name="set_fullscreen">
     <description summary="set the window as fullscreen on an output">
-  Make the surface fullscreen.
+      Make the surface fullscreen.
 
 
-  After requestion that the surface should be fullscreened, the 
-  compositor will respond
+      After requestion that the surface should be fullscreened, the 
+      compositor will respond
 
 

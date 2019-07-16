@@ -115,6 +115,9 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         return 0
     endif
 
+    let pline = getline(ptag)
+    let pind  = indent(ptag)
+
     let syn_name_start = '' " Syntax element at start of line (excluding whitespace)
     let syn_name_end = ''   " Syntax element at end of line
     let curline = getline(a:lnum)
@@ -132,11 +135,9 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         return <SID>XmlIndentComment(a:lnum)
     elseif empty(syn_name_start) && empty(syn_name_end)
         " non-xml tag content: use indent from 'autoindent'
-        return -1
+        return pind + shiftwidth()
     endif
 
-    let pline = getline(ptag)
-    let pind  = indent(ptag)
     " Get indent from previous tag line
     let ind = <SID>XmlIndentSum(pline, -1, pind)
     " Determine indent from current line
