@@ -4,7 +4,7 @@ PLUGIN=$(shell basename "$$PWD")
 all: test
 
 zip:
-	@rm -f $(PLUGIN).zip; zip $(PLUGIN).zip ftplugin/*.vim indent/*.vim autoload/*.vim
+	@rm -f $(PLUGIN).zip; zip $(PLUGIN).zip ftplugin/*.vim indent/*.vim autoload/*.vim syntax/*.vim
 
 test:
 	cd test && ./test.sh -v && cd .. && $(MAKE) clean >/dev/null
