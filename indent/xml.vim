@@ -1,9 +1,10 @@
 "     Language: xml
 "   Repository: https://github.com/chrisbra/vim-xml-ftplugin
-" Last Changed: Feb 04, 2019
+" Last Changed: July 27, 2019
 "   Maintainer: Christian Brabandt <cb@256bit.org>
 " Previous Maintainer:  Johannes Zellner <johannes@zellner.org>
 " Last Change:
+" 20190726 - Correctly handle non-tagged data
 " 20190204 - correctly handle wrap tags
 "            https://github.com/chrisbra/vim-xml-ftplugin/issues/5
 " 20190128 - Make sure to find previous tag
