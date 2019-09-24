@@ -13,8 +13,8 @@ dir=$PWD
 # needs to be run in the same subprocess, otherwise setting rc won't work
 for i in */; do
   {
-    printf "${blue}%s${reset} tests\n============\n" ${i%%/}
+    printf "\n${blue}%s tests${reset}\n============\n" ${i%%/}
     test -f ${i}/test.sh && cd "$i" && ./test.sh && cd ..
   }
 done
-cd $PWD
+cd $dir
