@@ -5,12 +5,10 @@ let s:filename='XSyntest.vim'
 func Test_Syntax()
   new
   vsp
-  let dir=expand("$VIM_XML_RT")
   let lines =<< trim END
     set nocp noshowcmd noruler
     syn off
     set rtp^=$VIM_XML_RT
-    " Need to distinguish between Function and Identifier
     e input.xml
     syn on
   END
