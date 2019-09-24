@@ -1,1 +1,0 @@
-vim --clean --cmd ':set rtp^=../..' -c 'set ts=2 sw=0 sts=-1 et' -c 'norm! gqipgg=G' -c ':saveas! output.xml' -c ':q!'  input.xml

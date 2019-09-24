@@ -1,0 +1,9 @@
+#!/bin/sh
+vim --clean \
+--cmd ':set rtp^=$VIM_XML_RT' \
+-c 'set ts=2 sw=0 sts=-1 et' \
+-c '2' \
+-c 'exe ":norm! A<!-- comment -->\<BS>>\<esc>"' \
+-c ':saveas! output.xml' \
+-c ':q!' \
+input.xml
