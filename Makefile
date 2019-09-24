@@ -10,7 +10,7 @@ test:
 	cd test && VIM_XML_RT=$(shell echo "$$PWD") ./test_runtime.sh -v && cd .. && $(MAKE) clean >/dev/null
 
 clean:
-	find . -type f -name "output.xml" -delete -o -name "*.swp" -delete
+	find . -type f -name "output.*" -delete -o -name "*.swp" -delete -o -name "SKIPPED" -delete -o -name "X*" -delete
 
 submit:
 	@echo "Set environment variable '\$$MSG' to the tag message, like this:"
