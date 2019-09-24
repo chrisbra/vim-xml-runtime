@@ -1,12 +1,13 @@
 " Vim syntax file
-" Language:	XML
+" Language: XML
 " Maintainer: Christian Brabandt <cb@256bit.org>
-" Previous Maintainer:	Johannes Zellner <johannes@zellner.org>
-"		Author and previous maintainer:
-"		Paul Siegmann <pauls@euronet.nl>
-" Last Change:	2019 Sep 22
+" Repository: https://github.com/chrisbra/vim-xml-ftplugin
+" Previous Maintainer: Johannes Zellner <johannes@zellner.org>
+" Author: Paul Siegmann <pauls@euronet.nl>
+" Last Changed:	Sept 24, 2019
 " Filenames:	*.xml
-" $Id: xml.vim,v 1.3 2006/04/11 21:32:00 vimboss Exp $
+" Last Change:
+" 20190923 - Fix xmlEndTag to match xmlTag (vim/vim#884)
 
 " CONFIGURATION:
 "   syntax folding can be turned on by
