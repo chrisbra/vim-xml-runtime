@@ -2,6 +2,11 @@
 set nocp
 set rtp^=$VIM_XML_RT
 
+" global Variables
+let g:skipped='SKIPPED'
+let g:SourceFilename='XSyntest.vim'
+let g:dumpname='output.dump'
+
 " helper functions
 function! NewWindow(height, width) abort
   exe a:height . 'new'
@@ -54,3 +59,19 @@ func StopVimInTerminal(buf)
   sleep 10ms
   only!
 endfunc
+
+func Skip(message, filename)
+  call writefile([], a:filename)
+  echom a:message
+  qa!
+endfunc
+
+" just in case
+call CleanUpFiles([g:SourceFilename, g:dumpname, g:skipped])
+if !has("terminal")
+  call Skip("Terminal not supported, skipping!", g:skipped)
+endif
+
+if expand("$VIM_XML_RT")[0] == '$'
+  call Skip("$VIM_XML_RT not set!", g:skipped)
+endif
