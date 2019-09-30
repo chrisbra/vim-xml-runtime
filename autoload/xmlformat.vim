@@ -58,13 +58,15 @@ func! xmlformat#Format()
      let lastitem = item
    endfor
 
-   if !empty(result)
+  if !empty(result)
+    let lastprevline = getline(v:lnum + v:count)
     exe v:lnum. ",". (v:lnum + v:count - 1). 'd'
     call append(v:lnum - 1, result)
     " Might need to remove the last line, if it became empty because of the
     " append() call
     let last = v:lnum + len(result)
-    if getline(last) is ''
+    " do not use empty(), it returns true for `empty(0)`
+    if getline(last) is '' && lastprevline is ''
       exe last. 'd'
     endif
   endif
