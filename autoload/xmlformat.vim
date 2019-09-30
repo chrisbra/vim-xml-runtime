@@ -22,6 +22,7 @@ func! xmlformat#Format()
     " do not fall back to internal formatting
     return 0
   endif
+  let count_orig = v:count
   let sw  = shiftwidth()
   let prev = prevnonblank(v:lnum-1)
   let s:indent = indent(prev)/sw
@@ -30,7 +31,7 @@ func! xmlformat#Format()
   let is_xml_decl = 0
   " go through every line, but don't join all content together and join it
   " back. We might lose empty lines
-  for line in getline(v:lnum, (v:lnum + v:count - 1))
+  for line in getline(v:lnum, (v:lnum + count_orig - 1))
     " Keep empty input lines?
     if empty(line)
       call add(result, '')
@@ -72,14 +73,15 @@ func! xmlformat#Format()
   endfor
 
   if !empty(result)
-    let lastprevline = getline(v:lnum + v:count)
-    exe v:lnum. ",". (v:lnum + v:count - 1). 'd'
+    let lastprevline = getline(v:lnum + count_orig)
+    let delete_lastline = v:lnum + count_orig - 1 == line('$')
+    exe v:lnum. ",". (v:lnum + count_orig - 1). 'd'
     call append(v:lnum - 1, result)
     " Might need to remove the last line, if it became empty because of the
     " append() call
     let last = v:lnum + len(result)
     " do not use empty(), it returns true for `empty(0)`
-    if getline(last) is '' && lastprevline is ''
+    if getline(last) is '' && lastprevline is '' && delete_lastline
       exe last. 'd'
     endif
   endif
