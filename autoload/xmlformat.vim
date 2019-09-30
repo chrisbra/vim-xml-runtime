@@ -28,35 +28,48 @@ func! xmlformat#Format()
   let result = []
   let lastitem = prev ? getline(prev) : ''
   let is_xml_decl = 0
-  " split on `>`, but don't split on very first opening <
-  " this means, items can be like ['<tag>', 'tag content</tag>']
-  for item in split(join(getline(v:lnum, (v:lnum + v:count - 1))), '.\@<=[>]\zs')
-    if s:EndTag(item)
-      let s:indent = s:DecreaseIndent()
-      call add(result, s:Indent(item))
-    elseif s:EmptyTag(lastitem)
-      call add(result, s:Indent(item))
-    elseif s:StartTag(lastitem) && s:IsTag(item)
-      let s:indent += 1
-      call add(result, s:Indent(item))
-     else
-       if !s:IsTag(item)
-        " Simply split on '<', if there is one,
-        " but reformat according to &textwidth
-        let t=split(item, '.<\@=\zs')
-        " t should only contain 2 items, but just be safe here
-        let s:indent+=1
-        let result+=s:FormatContent(t[0])
+  " go through every line, but don't join all content together and join it
+  " back. We might lose empty lines
+  for line in getline(v:lnum, (v:lnum + v:count - 1))
+    " Keep empty input lines?
+    if empty(line)
+      call add(result, '')
+      continue
+    endif
+    " split on `>`, but don't split on very first opening <
+    " this means, items can be like ['<tag>', 'tag content</tag>']
+    for item in split(line, '.\@<=[>]\zs')
+      if s:EndTag(item)
         let s:indent = s:DecreaseIndent()
-        for y in t[1:]
-          let result+=s:FormatContent(y)
-        endfor
-       else
         call add(result, s:Indent(item))
+      elseif s:EmptyTag(lastitem)
+        call add(result, s:Indent(item))
+      elseif s:StartTag(lastitem) && s:IsTag(item)
+        let s:indent += 1
+        call add(result, s:Indent(item))
+      else
+        if !s:IsTag(item)
+          " Simply split on '<', if there is one,
+          " but reformat according to &textwidth
+          let t=split(item, '.<\@=\zs')
+          " t should only contain 2 items, but just be safe here
+          if s:IsTag(lastitem)
+            let s:indent+=1
+          endif
+          let result+=s:FormatContent(t[0])
+          if s:EndTag(t[1])
+            let s:indent = s:DecreaseIndent()
+          endif
+          for y in t[1:]
+            let result+=s:FormatContent(y)
+          endfor
+        else
+          call add(result, s:Indent(item))
+        endif
       endif
-     endif
-     let lastitem = item
-   endfor
+      let lastitem = item
+    endfor
+  endfor
 
   if !empty(result)
     let lastprevline = getline(v:lnum + v:count)
