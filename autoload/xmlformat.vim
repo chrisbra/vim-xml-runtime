@@ -88,6 +88,7 @@ func! s:StartTag(tag)
   let is_comment = s:IsComment(a:tag)
   return a:tag =~? '^\s*<[^/?]' && !is_comment
 endfunc
+" Check if tag is a Comment start {{{1
 func! s:IsComment(tag)
   return a:tag =~? '<!--'
 endfunc
