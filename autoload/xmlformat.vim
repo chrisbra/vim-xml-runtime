@@ -28,7 +28,8 @@ func! xmlformat#Format()
   let result = []
   let lastitem = prev ? getline(prev) : ''
   let is_xml_decl = 0
-  " split on `<`, but don't split on very first opening <
+  " split on `>`, but don't split on very first opening <
+  " this means, items can be like ['<tag>', 'tag content</tag>']
   for item in split(join(getline(v:lnum, (v:lnum + v:count - 1))), '.\@<=[>]\zs')
     if s:EndTag(item)
       let s:indent = s:DecreaseIndent()
