@@ -14,7 +14,10 @@ dir=$PWD
 for i in */; do
   {
     printf "\n${blue}%s tests${reset}\n============\n" ${i%%/}
-    test -f ${i}/test.sh && cd "$i" && ./test.sh && cd ..
+    test -f ${i}/test.sh && cd "$i" && ./test.sh; rc=$?; cd ..
+    if [ $rc -ne 0 ]; then
+      exit $rc;
+    fi
   }
 done
 cd $dir
