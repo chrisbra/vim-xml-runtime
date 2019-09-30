@@ -41,12 +41,16 @@ func! xmlformat#Format()
       call add(result, s:Indent(item))
      else
        if !s:IsTag(item)
-         " Simply split on '<'
-         let t=split(item, '.<\@=\zs')
-         let s:indent+=1
-         call add(result, s:Indent(t[0]))
-         let s:indent = s:DecreaseIndent()
-         call add(result, s:Indent(t[1]))
+        " Simply split on '<', if there is one,
+        " but reformat according to &textwidth
+        let t=split(item, '.<\@=\zs')
+        " t should only contain 2 items, but just be safe here
+        let s:indent+=1
+        let result+=s:FormatContent(t[0])
+        let s:indent = s:DecreaseIndent()
+        for y in t[1:]
+          let result+=s:FormatContent(y)
+        endfor
        else
         call add(result, s:Indent(item))
       endif
@@ -109,6 +113,20 @@ endfunc
 " Check if tag is empty <tag/> {{{1
 func! s:EmptyTag(tag)
   return a:tag =~ '/>\s*$'
+endfunc
+" Format input line according to textwidth {{{1
+func! s:FormatContent(string)
+  let result=[]
+  if &textwidth > 0
+    " Need to start a bit before textwidth end for whitespace to enable
+    " wrapping, use 'textwidth'- 10, at the risk of wrapping a bit early
+    for cnt in split(a:string, '.\{'.(&textwidth > 10 ? &textwidth-10 : &textwidth).'}\zs\s')
+      call add(result, s:Indent(s:Trim(cnt)))
+    endfor
+  else
+    call add(result, s:Indent(s:Trim(a:string)))
+  endif
+  return result
 endfunc
 " Restoration And Modelines: {{{1
 let &cpo= s:keepcpo
