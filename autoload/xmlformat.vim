@@ -135,17 +135,23 @@ endfunc
 func! s:FormatContent(string)
   let result=[]
   if &textwidth > 0
-    " Need to start a bit before textwidth end for whitespace to enable
-    " wrapping, use 'textwidth'- 10, at the risk of wrapping a bit early
-    let list = split(a:string, '.\{'.(&textwidth > 10 ? &textwidth-10 : &textwidth).'}\zs\s')
+    let column=0
     let idx = 0
-    for cnt in list
-      if idx > 0 && strwidth(result[idx-1].s:Trim(cnt)) < &textwidth
-        let result[idx-1].= ' '. s:Trim(cnt)
+    let cnt = 0
+    for word in split(a:string, '\s\+\S\+\zs') 
+      let prevcolumn = column
+      let column += strdisplaywidth(word, column)
+      if column > &textwidth || (cnt == 0)
+        let add = s:Indent(s:Trim(word))
+        call add(result, add)
+        let column = strdisplaywidth(add)
+        if (cnt > 0)
+          let idx += 1
+        endif
       else
-        call add(result, s:Indent(s:Trim(cnt)))
+        let result[idx] .= word
       endif
-      let idx += 1
+      let cnt += 1
     endfor
   else
     call add(result, s:Indent(s:Trim(a:string)))
