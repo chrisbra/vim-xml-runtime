@@ -31,11 +31,17 @@ func! xmlformat#Format()
   let is_xml_decl = 0
   " go through every line, but don't join all content together and join it
   " back. We might lose empty lines
-  for line in getline(v:lnum, (v:lnum + count_orig - 1))
+  let list = getline(v:lnum, (v:lnum + count_orig - 1))
+  let current = 0
+  for line in list
     " Keep empty input lines?
     if empty(line)
       call add(result, '')
       continue
+    elseif line !~# '<[/]\?[^>]*>'
+      let nextmatch = match(list, '<[/]\?[^>]*>', current)
+      let line .= join(list[(current + 1):(nextmatch-1)], "\n")
+      call remove(list, current+1, nextmatch-1)
     endif
     " split on `>`, but don't split on very first opening <
     " this means, items can be like ['<tag>', 'tag content</tag>']
@@ -57,19 +63,20 @@ func! xmlformat#Format()
           if s:IsTag(lastitem)
             let s:indent+=1
           endif
-          let result+=s:FormatContent(t[0])
+          let result+=s:FormatContent([t[0]])
           if s:EndTag(t[1])
             let s:indent = s:DecreaseIndent()
           endif
-          for y in t[1:]
-            let result+=s:FormatContent(y)
-          endfor
+          "for y in t[1:]
+            let result+=s:FormatContent(t[1:])
+          "endfor
         else
           call add(result, s:Indent(item))
         endif
       endif
       let lastitem = item
     endfor
+    let current += 1
   endfor
 
   if !empty(result)
@@ -132,30 +139,40 @@ func! s:EmptyTag(tag)
   return a:tag =~ '/>\s*$'
 endfunc
 " Format input line according to textwidth {{{1
-func! s:FormatContent(string)
+func! s:FormatContent(list)
   let result=[]
+  let limit = 80
   if &textwidth > 0
-    let column=0
-    let idx = 0
-    let cnt = 0
-    for word in split(a:string, '\s\+\S\+\zs') 
-      let prevcolumn = column
+    let limit = &textwidth
+  endif
+  let column=0
+  let idx = -1
+  let add_indent = 0
+  let cnt = 0
+  for item in a:list
+    for word in split(item, '\s\+\S\+\zs') 
       let column += strdisplaywidth(word, column)
-      if column > &textwidth || (cnt == 0)
+      if match(word, "^\\s*\n\\+\\s*$") > -1
+        call add(result, '')
+        let idx += 1
+        let column = 0
+        let add_indent = 1
+      elseif column > limit || cnt == 0
         let add = s:Indent(s:Trim(word))
         call add(result, add)
         let column = strdisplaywidth(add)
-        if (cnt > 0)
-          let idx += 1
-        endif
+        let idx += 1
       else
-        let result[idx] .= word
+        if add_indent
+          let result[idx] = s:Indent(s:Trim(word))
+        else
+          let result[idx] .= ' '. s:Trim(word)
+        endif
+        let add_indent = 0
       endif
       let cnt += 1
     endfor
-  else
-    call add(result, s:Indent(s:Trim(a:string)))
-  endif
+  endfor
   return result
 endfunc
 " Restoration And Modelines: {{{1
