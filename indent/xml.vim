@@ -2,7 +2,7 @@
 " Maintainer: Christian Brabandt <cb@256bit.org>
 " Repository: https://github.com/chrisbra/vim-xml-ftplugin
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
-" Last Changed: July 27, 2019
+" Last Changed: 2019 Oct 24
 " Last Change:
 " 20190726 - Correctly handle non-tagged data
 " 20190204 - correctly handle wrap tags

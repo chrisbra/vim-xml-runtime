@@ -1,6 +1,6 @@
 " Vim plugin for formatting XML
-" Last Change: Thu, 07 Dec 2018
-"     Version: 0.1
+" Last Change: 2019 Oct 24
+"     Version: 0.2
 "      Author: Christian Brabandt <cb@256bit.org>
 "  Repository: https://github.com/chrisbra/vim-xml-ftplugin
 "     License: VIM License
