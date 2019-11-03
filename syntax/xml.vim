@@ -52,6 +52,12 @@ set cpo&vim
 
 syn case match
 
+" Allow spell checking in tag values,
+" there is no syntax region for that,
+" so enable spell checking in top-level elements
+" <tag>This text is spell checked</tag>
+syn spell toplevel
+
 " mark illegal characters
 syn match xmlError "[<&]"
 
