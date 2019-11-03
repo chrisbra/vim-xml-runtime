@@ -4,11 +4,12 @@
 " Repository: https://github.com/chrisbra/vim-xml-ftplugin
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
 " Author: Paul Siegmann <pauls@euronet.nl>
-" Last Changed:	Sept 24, 2019
+" Last Changed:	Nov 03, 2019
 " Filenames:	*.xml
 " Last Change:
 " 20190923 - Fix xmlEndTag to match xmlTag (vim/vim#884)
 " 20190924 - Fix xmlAttribute property (amadeus/vim-xml@d8ce1c946)
+" 20191103 - Enable spell checking globally
 
 " CONFIGURATION:
 "   syntax folding can be turned on by
