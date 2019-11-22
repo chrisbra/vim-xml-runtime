@@ -134,7 +134,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
 
     if syn_name_end =~ 'Comment' && syn_name_start =~ 'Comment'
         return <SID>XmlIndentComment(a:lnum)
-    elseif empty(syn_name_start) && empty(syn_name_end)
+    elseif empty(syn_name_start) && empty(syn_name_end) && a:use_syntax_check
         " non-xml tag content: use indent from 'autoindent'
         return pind + shiftwidth()
     endif
