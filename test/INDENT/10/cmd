@@ -1,1 +1,8 @@
-vim --clean --cmd ':set rtp^=$VIM_XML_RT' -c 'set ts=2 sw=0 sts=-1 et' -c ':exe "norm! 3ggA< \<BS>"' -c ':saveas! output.xml' -c ':q!'  input.xml
+#!/bin/sh
+vim --clean \
+--cmd ':set rtp^=$VIM_XML_RT' \
+-c 'set ts=2 sw=0 sts=-1 et' \
+-c ':exe "norm! /compositor\<cr>i\<cr>"' \
+-c ':saveas! output.xml' \
+-c ':q!' \
+input.xml

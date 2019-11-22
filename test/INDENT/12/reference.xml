@@ -1,5 +1,5 @@
-<some>
-  <tag>With some content
-    in multiline</tag>
-  <another-tag />
-</some>
+<tag>
+  <another>
+    world
+  </another>
+</tag>

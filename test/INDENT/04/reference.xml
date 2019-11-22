@@ -5,5 +5,13 @@
     <tag2>
       <tag3/>
     </tag2>
+    <!-- text comment -->
+
+    <!--
+      text comment
+    -->
   </tag1>
+  <!--
+    text comment
+  end coment -->
 </tag0>

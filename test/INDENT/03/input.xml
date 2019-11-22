@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tag0>
+                <tag1>
+ <!-- no trailing character but a leading character, will be indented -->
+                </tag1>
+                <tag1>
+<!-- no leading character but trailing characters, will be indented -->12
+                </tag1>
+                <tag1>
+<!-- no leading character and a single trailing character, indention will have NO effect -->1
+                </tag1>
+                <tag1>
+<!-- no leading nor trailing character, indention will have NO effect -->
+                </tag1>
+</tag0>

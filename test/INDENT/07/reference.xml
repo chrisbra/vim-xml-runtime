@@ -1,15 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tag0>
-  <tag1>
-    <!-- no trailing character but a leading character, will be indented -->
-  </tag1>
-  <tag1>
-    <!-- no leading character but trailing characters, will be indented -->12
-  </tag1>
-  <tag1>
-    <!-- no leading character and a single trailing character, indention will have NO effect -->1
-  </tag1>
-  <tag1>
-    <!-- no leading nor trailing character, indention will have NO effect -->
-  </tag1>
-</tag0>
+<some>
+  <multiline-tag
+    attr1="1" attr2="2"
+    attr3="1" attr4="2" />
+  <another-tag />
+</some>

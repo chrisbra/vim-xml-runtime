@@ -1,1 +1,1 @@
-vim --clean --cmd ':set rtp^=$VIM_XML_RT' -c 'set ts=2 sw=0 sts=-1 et' -c 'norm! gg=G' -c ':saveas! output.xml' -c ':q!'  input.xml
+vim --clean --cmd ':set rtp^=$VIM_XML_RT' -c 'set ts=2 sw=0 sts=-1 et' -c ':exe "norm! gg=G"' -c ':saveas! output.xml' -c ':q!'  input.xml
