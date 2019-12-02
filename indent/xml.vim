@@ -2,8 +2,9 @@
 " Maintainer: Christian Brabandt <cb@256bit.org>
 " Repository: https://github.com/chrisbra/vim-xml-ftplugin
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
-" Last Changed: 2019 Oct 24
+" Last Changed: 2019 Dec 02
 " Last Change:
+" 20191202 - Handle docbk filetype
 " 20190726 - Correctly handle non-tagged data
 " 20190204 - correctly handle wrap tags
 "            https://github.com/chrisbra/vim-xml-ftplugin/issues/5
@@ -148,7 +149,7 @@ endfun
 
 func! <SID>IsXMLContinuation(line)
     " Checks, whether or not the line matches a start-of-tag
-    return a:line !~ '^\s*<'
+    return a:line !~ '^\s*<' && &ft is# 'xml'
 endfunc
 
 func! <SID>HasNoTagEnd(line)
