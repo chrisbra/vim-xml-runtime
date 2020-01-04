@@ -1,7 +1,5 @@
 source ../setup.vim
 
-let s:filename='XSyntest.vim'
-
 func Test_Syntax()
   new
   vsp
