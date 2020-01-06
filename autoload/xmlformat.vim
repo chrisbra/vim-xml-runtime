@@ -15,7 +15,7 @@ let s:keepcpo       = &cpo
 set cpo&vim
 
 " Main function: Format the input {{{1
-func! xmlformat#Format()
+func! xmlformat#Format() abort
   " only allow reformatting through the gq command
   " (e.g. Vim is in normal mode)
   if mode() != 'n'
@@ -99,15 +99,15 @@ func! xmlformat#Format()
   return 0
 endfunc
 " Check if given tag is XML Declaration header {{{1
-func! s:IsXMLDecl(tag)
+func! s:IsXMLDecl(tag) abort
   return a:tag =~? '^\s*<?xml\s\?\%(version="[^"]*"\)\?\s\?\%(encoding="[^"]*"\)\? ?>\s*$'
 endfunc
 " Return tag indented by current level {{{1
-func! s:Indent(item)
+func! s:Indent(item) abort
   return repeat(' ', shiftwidth()*s:indent). s:Trim(a:item)
 endfu
 " Return item trimmed from leading whitespace {{{1
-func! s:Trim(item)
+func! s:Trim(item) abort
   if exists('*trim')
     return trim(a:item)
   else
@@ -115,33 +115,33 @@ func! s:Trim(item)
   endif
 endfunc
 " Check if tag is a new opening tag <tag> {{{1
-func! s:StartTag(tag)
+func! s:StartTag(tag) abort
   let is_comment = s:IsComment(a:tag)
   return a:tag =~? '^\s*<[^/?]' && !is_comment
 endfunc
 " Check if tag is a Comment start {{{1
-func! s:IsComment(tag)
+func! s:IsComment(tag) abort
   return a:tag =~? '<!--'
 endfunc
 " Remove one level of indentation {{{1
-func! s:DecreaseIndent()
+func! s:DecreaseIndent() abort
   return (s:indent > 0 ? s:indent - 1 : 0)
 endfunc
 " Check if tag is a closing tag </tag> {{{1
-func! s:EndTag(tag)
+func! s:EndTag(tag) abort
   return a:tag =~? '^\s*</'
 endfunc
 " Check that the tag is actually a tag and not {{{1
 " something like "foobar</foobar>"
-func! s:IsTag(tag)
+func! s:IsTag(tag) abort
   return s:Trim(a:tag)[0] == '<'
 endfunc
 " Check if tag is empty <tag/> {{{1
-func! s:EmptyTag(tag)
+func! s:EmptyTag(tag) abort
   return a:tag =~ '/>\s*$'
 endfunc
 " Format input line according to textwidth {{{1
-func! s:FormatContent(list)
+func! s:FormatContent(list) abort
   let result=[]
   let limit = 80
   if &textwidth > 0
