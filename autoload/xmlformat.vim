@@ -1,6 +1,6 @@
 " Vim plugin for formatting XML
-" Last Change: 2019 Oct 24
-"     Version: 0.2
+" Last Change: 2020 Jan 06
+"     Version: 0.3
 "      Author: Christian Brabandt <cb@256bit.org>
 "  Repository: https://github.com/chrisbra/vim-xml-ftplugin
 "     License: VIM License
@@ -40,8 +40,10 @@ func! xmlformat#Format()
       continue
     elseif line !~# '<[/]\?[^>]*>'
       let nextmatch = match(list, '<[/]\?[^>]*>', current)
-      let line .= join(list[(current + 1):(nextmatch-1)], "\n")
-      call remove(list, current+1, nextmatch-1)
+      if nextmatch > -1 
+        let line .= ' '. join(list[(current + 1):(nextmatch-1)], " ")
+        call remove(list, current+1, nextmatch-1)
+      endif
     endif
     " split on `>`, but don't split on very first opening <
     " this means, items can be like ['<tag>', 'tag content</tag>']
@@ -151,6 +153,10 @@ func! s:FormatContent(list)
   let cnt = 0
   for item in a:list
     for word in split(item, '\s\+\S\+\zs') 
+      if match(word, '^\s\+$') > -1
+        " skip empty words
+        continue
+      endif
       let column += strdisplaywidth(word, column)
       if match(word, "^\\s*\n\\+\\s*$") > -1
         call add(result, '')
