@@ -49,7 +49,7 @@ func! xmlformat#Format() abort
     " this means, items can be like ['<tag>', 'tag content</tag>']
     for item in split(line, '.\@<=[>]\zs')
       if s:EndTag(item)
-        let s:indent = s:DecreaseIndent()
+        call s:DecreaseIndent()
         call add(result, s:Indent(item))
       elseif s:EmptyTag(lastitem)
         call add(result, s:Indent(item))
@@ -61,13 +61,23 @@ func! xmlformat#Format() abort
           " Simply split on '<', if there is one,
           " but reformat according to &textwidth
           let t=split(item, '.<\@=\zs')
+
+          " if the content fits well within a single line, add it there
+          " so that the output looks like this:
+          "
+          " <foobar>1</foobar>
+          if s:TagContent(lastitem) is# s:TagContent(t[1]) && strlen(result[-1]) + strlen(item) <= s:Textwidth()
+            let result[-1] .= item
+            let lastitem = t[1]
+            continue
+          endif
           " t should only contain 2 items, but just be safe here
           if s:IsTag(lastitem)
             let s:indent+=1
           endif
           let result+=s:FormatContent([t[0]])
           if s:EndTag(t[1])
-            let s:indent = s:DecreaseIndent()
+            call s:DecreaseIndent()
           endif
           "for y in t[1:]
             let result+=s:FormatContent(t[1:])
@@ -125,7 +135,7 @@ func! s:IsComment(tag) abort
 endfunc
 " Remove one level of indentation {{{1
 func! s:DecreaseIndent() abort
-  return (s:indent > 0 ? s:indent - 1 : 0)
+  let s:indent = (s:indent > 0 ? s:indent - 1 : 0)
 endfunc
 " Check if tag is a closing tag </tag> {{{1
 func! s:EndTag(tag) abort
@@ -140,13 +150,18 @@ endfunc
 func! s:EmptyTag(tag) abort
   return a:tag =~ '/>\s*$'
 endfunc
+func! s:TagContent(tag) abort "{{{1
+  " Return content of a tag
+  return substitute(a:tag, '^\s*<[/]\?\([^>]*\)>\s*$', '\1', '')
+endfunc
+func! s:Textwidth() abort "{{{1
+  " return textwidth (or 80 if not set)
+  return &textwidth == 0 ? 80 : &textwidth
+endfunc
 " Format input line according to textwidth {{{1
 func! s:FormatContent(list) abort
   let result=[]
-  let limit = 80
-  if &textwidth > 0
-    let limit = &textwidth
-  endif
+  let limit = s:Textwidth()
   let column=0
   let idx = -1
   let add_indent = 0

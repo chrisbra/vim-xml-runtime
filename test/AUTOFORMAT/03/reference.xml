@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AuftragKomplett FROM="90700" TO="P360" xmlns="http://www.evelopment.de/schema/AuftragKomplett">
-  <foobar>
-    eins zwei drei
-  </foobar>
+  <foobar>eins zwei drei</foobar>
   <Bestellung BestellungStatus="1" ExternalID="5761230" ID="?" Neuanlage="2016-04-13T10:00:00.0" Exportiert="2018-05-07T17:27:09.490" LetzteAenderung="2018-05-07T17:27:09.490" Auftragsart="0" Auftragsreferenz="Online-Auftrag: 5761230" Medium="1" Origin="?" Affiliate="?" Versandwunsch="Standard">
     <Kundenbeziehung ExternalID="20001082" Typ="1" Vertriebsweg="2" ID="?" Exportiert="2018-05-07T17:27:09.521" Nummer="20001082">
       <Standards>
