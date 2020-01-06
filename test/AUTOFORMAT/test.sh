@@ -8,6 +8,11 @@ green=$(tput setaf 2)
 reset=$(tput sgr0)
 rc=0
 
+if [ -z "$VIM_XML_RT" ]; then
+  printf "\$VIM_XML_RT is not set, aborting!\n"
+  exit 1;
+fi
+
 # needs to be run in the same subprocess, otherwise setting rc won't work
 for i in */; do
   {
