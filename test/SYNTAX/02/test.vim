@@ -19,6 +19,7 @@ func Test_Syntax()
   call term_dumpwrite(buf, g:dumpname)
   " clean up
   call StopVimInTerminal(buf)
+  call delete(g:SourceFilename)
 endfunc
 
 call Test_Syntax()
