@@ -45,7 +45,7 @@ if !exists('b:xml_indent_open')
 endif
 
 if !exists('b:xml_indent_close')
-    let b:xml_indent_close = '.\{-}</'
+    let b:xml_indent_close = '.\{-}</\|/>\s*$'
     " end pre tag, e.g. </address>
     " let b:xml_indent_close = '.\{-}</\(address\)\@!'
 endif
@@ -137,7 +137,11 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         return <SID>XmlIndentComment(a:lnum)
     elseif empty(syn_name_start) && empty(syn_name_end) && a:use_syntax_check
         " non-xml tag content: use indent from 'autoindent'
-        return pind + shiftwidth()
+        if pline =~ b:xml_indent_close
+            return -1
+        else
+            return pind + shiftwidth()
+        endif
     endif
 
     " Get indent from previous tag line
@@ -160,7 +164,7 @@ endfunc
 " return indent for a commented line,
 " the middle part might be indented one additional level
 func! <SID>XmlIndentComment(lnum)
-    let ptagopen = search(b:xml_indent_open, 'bnW')
+    let ptagopen = search('<[^/-]*>\s*$', 'bnW')
     let ptagclose = search(b:xml_indent_close, 'bnW')
     if getline(a:lnum) =~ '<!--'
         " if previous tag was a closing tag, do not add
