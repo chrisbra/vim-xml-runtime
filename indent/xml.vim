@@ -46,7 +46,7 @@ if !exists('b:xml_indent_open')
 endif
 
 if !exists('b:xml_indent_close')
-    let b:xml_indent_close = '.\{-}</\|/>\s*$'
+    let b:xml_indent_close = '.\{-}</\|/>.\{-}'
     " end pre tag, e.g. </address>
     " let b:xml_indent_close = '.\{-}</\(address\)\@!'
 endif
@@ -170,13 +170,19 @@ endfunc
 " return indent for a commented line,
 " the middle part might be indented one additional level
 func! <SID>XmlIndentComment(lnum)
-    let ptagopen = search('<[^/-]*>\s*$', 'bnW')
+    let ptagopen = search('.\{-}<[:A-Z_a-z]\_[^/]\{-}>.\{-}', 'bnW')
     let ptagclose = search(b:xml_indent_close, 'bnW')
     if getline(a:lnum) =~ '<!--'
         " if previous tag was a closing tag, do not add
         " one additional level of indent
         if ptagclose > ptagopen && a:lnum > ptagclose
-            return indent(ptagclose)
+            " If the previous tag was closed on the same line as it was
+            " declared, we should indent with its indent level.
+            if !<SID>IsXMLContinuation(getline(ptagclose))
+                return indent(ptagclose)
+            else
+                return indent(ptagclose) - shiftwidth()
+            endif
         else
             " start of comment, add one indentation level
             return indent(ptagopen) + shiftwidth()
