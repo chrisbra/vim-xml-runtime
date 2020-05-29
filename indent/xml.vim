@@ -4,6 +4,7 @@
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
 " Last Changed: 2019 Dec 02
 " Last Change:
+" 20200529 - Handle empty closing tags correctly
 " 20191202 - Handle docbk filetype
 " 20190726 - Correctly handle non-tagged data
 " 20190204 - correctly handle wrap tags
@@ -81,7 +82,7 @@ endfun
 
 " [-- return the sum of indents of a:lnum --]
 fun! <SID>XmlIndentSum(line, style, add)
-    if <SID>IsXMLContinuation(a:line) && a:style == 0
+    if <SID>IsXMLContinuation(a:line) && a:style == 0 && !<SID>IsXMLEmptyClosingTag(a:line)
         " no complete tag, add one additional indent level
         " but only for the current line
         return a:add + shiftwidth()
@@ -159,6 +160,11 @@ endfunc
 func! <SID>HasNoTagEnd(line)
     " Checks whether or not the line matches '>' (so finishes a tag)
     return a:line !~ '>\s*$'
+endfunc
+
+func! <SID>IsXMLEmptyClosingTag(line)
+    " Checks whether the line ends with an empty closing tag such as <lb/>
+    return a:line =~? '<[^>]*/>\s*$'
 endfunc
 
 " return indent for a commented line,
