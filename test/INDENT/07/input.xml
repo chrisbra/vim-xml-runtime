@@ -1,6 +1,15 @@
 <some>
+    <open-tag-with-dashes>
+        <test/>
+        <!-- abc -->
+    </open-tag-with-dashes>
     <multiline-tag
         attr1="1" attr2="2"
         attr3="1" attr4="2" />
     <another-tag />
+<!-- test comment -->
+    <another-multiline-tag
+        attr1="1" attr2="2"
+      attr3="1" attr4="2">1</another-multiline-tag>
+        <!-- test comment -->
 </some>
