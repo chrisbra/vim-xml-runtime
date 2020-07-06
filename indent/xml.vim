@@ -132,6 +132,9 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         endif
         let syn_name_end   = synIDattr(synID(a:lnum, strlen(curline) - 1, 1), 'name')
         let syn_name_start = synIDattr(synID(a:lnum, match(curline, '\S') + 1, 1), 'name')
+        let prev_syn_name_end   = synIDattr(synID(ptag, strlen(pline) - 1, 1), 'name')
+        " not needed (yet?)
+        " let prev_syn_name_start = synIDattr(synID(ptag, match(pline, '\S') + 1, 1), 'name')
     endif
 
     if syn_name_end =~ 'Comment' && syn_name_start =~ 'Comment'
@@ -140,8 +143,13 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         " non-xml tag content: use indent from 'autoindent'
         if pline =~ b:xml_indent_close
             return -1
+        elseif !empty(prev_syn_name_end)
+            " only indent by an extra shiftwidth, if the previous line ends
+            " with an XML like tag
+           return pind + shiftwidth()
         else
-            return pind + shiftwidth()
+            " no extra indent, looks like a text continuation line
+           return pind
         endif
     endif
 
