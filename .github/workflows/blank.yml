@@ -22,6 +22,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      # Check Vim version
+      - name: Vim Version
+        run: vim --version
+
       # Runs a single command using the runners shell
       - name: Run Tests
         run: make test
