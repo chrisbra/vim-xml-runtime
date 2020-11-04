@@ -1,5 +1,5 @@
 #!/bin/sh
-vim --clean \
+vim $VIM_DEFAULT_ARG \
 --cmd ':set rtp^=$VIM_XML_RT' \
 -c 'set ts=2 sw=0 sts=-1 et' \
 -c ':exe "norm! /compositor\<cr>i\<cr>"' \

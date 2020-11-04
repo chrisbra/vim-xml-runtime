@@ -1,3 +1,3 @@
 #!/bin/sh
-vim --clean \
+vim $VIM_DEFAULT_ARG \
 --cmd ':so test.vim' 

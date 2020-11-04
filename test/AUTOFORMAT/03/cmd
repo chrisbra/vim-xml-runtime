@@ -1,7 +1,7 @@
 #!/bin/sh
 
 vim \
-  --clean \
+  $VIM_DEFAULT_ARG \
   -c ':so $VIM_XML_RT/autoload/xmlformat.vim' \
   -c ':set formatexpr=xmlformat#Format() ts=2 sw=0 sts=-1' \
   -c 'norm! Vgq' \

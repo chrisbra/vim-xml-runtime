@@ -7,6 +7,7 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 blue=$(tput setaf 4)
 reset=$(tput sgr0)
+export VIM_DEFAULT_ARG="--clean --not-a-term -N"
 rc=0
 dir=$PWD
 
