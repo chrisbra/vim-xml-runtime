@@ -2,7 +2,7 @@
 " Maintainer: Christian Brabandt <cb@256bit.org>
 " Repository: https://github.com/chrisbra/vim-xml-ftplugin
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
-" Last Changed: 2019 Dec 02
+" Last Changed: 2020 Nov 4th
 " Last Change:
 " 20200529 - Handle empty closing tags correctly
 " 20191202 - Handle docbk filetype
