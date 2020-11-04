@@ -68,7 +68,7 @@ endfunc
 
 " just in case
 call CleanUpFiles([g:SourceFilename, g:dumpname, g:skipped])
-if !has("terminal")
+if !has("terminal") || v:version < 802
   call Skip("Terminal not supported, skipping!", g:skipped)
 endif
 
