@@ -3,11 +3,27 @@
 #set -x
 
 # Setup some color variables
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-blue=$(tput setaf 4)
-reset=$(tput sgr0)
+red=
+green=
+blue=
+yellow=
+reset=
+
+if [ -n "$TERM" ];  then
+	red=$(tput setaf 1)
+	green=$(tput setaf 2)
+	blue=$(tput setaf 4)
+	yellow=$(tput setaf 3)
+	reset=$(tput sgr0)
+fi
 export VIM_DEFAULT_ARG="--clean --not-a-term -N"
+
+export red
+export green
+export blue
+export yellow
+export reset
+
 rc=0
 dir=$PWD
 

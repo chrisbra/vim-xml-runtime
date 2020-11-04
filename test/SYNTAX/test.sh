@@ -2,11 +2,6 @@
 
 #set -x
 
-# Setup some color variables
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-yellow=$(tput setaf 3)
-reset=$(tput sgr0)
 rc=0
 
 # needs to be run in the same subprocess, otherwise setting rc won't work

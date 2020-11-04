@@ -2,10 +2,6 @@
 
 #set -x
 
-# Setup some color variables
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-reset=$(tput sgr0)
 rc=0
 
 if [ -z "$VIM_XML_RT" ]; then
