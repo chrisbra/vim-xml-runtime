@@ -9,7 +9,7 @@ for i in */; do
   {
     cd "$i" &&
     test -f "cmd" &&
-    ./cmd
+    ./cmd > /dev/null
     if [ -f output.dump ]; then
       diff -qu output.dump  reference.dump >/dev/null
       diff_rc=$?

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+#set -x
 
 rc=0
 
@@ -14,7 +14,7 @@ for i in */; do
   {
     cd "$i" &&
     test -f "cmd" && test -x "cmd" &&
-    ./cmd
+    ./cmd > /dev/null
     diff -qu output.xml  reference.xml >/dev/null
     if [ $? -ne 0 ]; then
       printf "Test %s:\t\t[${red}Failed${reset}]\n" ${i%%/}
