@@ -142,7 +142,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
     elseif empty(syn_name_start) && empty(syn_name_end) && a:use_syntax_check
         " non-xml tag content: use indent from 'autoindent'
         if pline =~ b:xml_indent_close
-            return -1
+            return pind
         elseif !empty(prev_syn_name_end)
             " only indent by an extra shiftwidth, if the previous line ends
             " with an XML like tag
