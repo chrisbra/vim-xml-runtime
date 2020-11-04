@@ -22,7 +22,7 @@ for i in */; do
     diff -qu output.xml  reference.xml >/dev/null
     if [ $? -ne 0 ]; then
       printf "Test %s:\t\t[${red}Failed${reset}]\n" ${i%%/}
-      if [ -n "$1" ] && [ "${1}" = "-v" ]; then
+			if [ -n "$VERBOSE" ] || ( [ -n "$1" ] && [ "${1}" = "-v" ] ); then
         diff -u output.xml reference.xml
       fi
       rc=1
