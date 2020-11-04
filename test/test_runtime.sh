@@ -15,6 +15,9 @@ if [ -n "$TERM" ];  then
 	blue=$(tput setaf 4)
 	yellow=$(tput setaf 3)
 	reset=$(tput sgr0)
+else
+	# make sure failing tests will output a diff on CI
+	export VERBOSE=1
 fi
 export VIM_DEFAULT_ARG="--clean --not-a-term -N"
 
