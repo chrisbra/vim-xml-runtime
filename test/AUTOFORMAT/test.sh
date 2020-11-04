@@ -17,7 +17,7 @@ fi
 for i in */; do
   {
     cd "$i" &&
-    test -f "cmd" &&
+    test -f "cmd" && test -x "cmd" &&
     ./cmd
     diff -qu output.xml  reference.xml >/dev/null
     if [ $? -ne 0 ]; then
