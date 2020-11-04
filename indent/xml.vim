@@ -191,6 +191,8 @@ func! <SID>XmlIndentComment(lnum)
             else
                 return indent(ptagclose) - shiftwidth()
             endif
+        elseif ptagclose == ptagopen
+            return indent(ptagclose)
         else
             " start of comment, add one indentation level
             return indent(ptagopen) + shiftwidth()

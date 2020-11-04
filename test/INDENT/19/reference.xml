@@ -1,0 +1,11 @@
+<MASTER TYPE="LEDGER">
+  <!-- comment1 -->
+  <PARENT FORMULA="someformula"/>
+  <!-- comment2 -->
+  <SOMETAG>Yes</SOMETAG>
+  <!-- comment3 -->
+  <ANOTHERTAG>Yes</ANOTHERTAG>
+  <!-- comment4 -->
+  <AFFECTSSTOCK FORMULA="someformula"/>
+  <!-- comment5 -->
+</MASTER>
