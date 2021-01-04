@@ -51,6 +51,10 @@ if !exists('b:xml_indent_close')
     " let b:xml_indent_close = '.\{-}</\(address\)\@!'
 endif
 
+if !exists('b:xml_indent_continuation_filetype')
+    let b:xml_indent_continuation_filetype = 'xml'
+endif
+
 let &cpo = s:keepcpo
 unlet s:keepcpo
 
@@ -162,7 +166,7 @@ endfun
 
 func! <SID>IsXMLContinuation(line)
     " Checks, whether or not the line matches a start-of-tag
-    return a:line !~ '^\s*<' && &ft is# 'xml'
+    return a:line !~ '^\s*<' && &ft =~# b:xml_indent_continuation_filetype
 endfunc
 
 func! <SID>HasNoTagEnd(line)
