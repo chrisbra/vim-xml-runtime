@@ -39,6 +39,8 @@ setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,},!^F
 " autoindent: used when the indentexpr returns -1
 setlocal autoindent
 
+let b:undo_indent = "setl ai< inde< indk<"
+
 if !exists('b:xml_indent_open')
     let b:xml_indent_open = '.\{-}<[:A-Z_a-z]'
     " pre tag, e.g. <address>
