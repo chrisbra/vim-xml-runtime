@@ -99,8 +99,8 @@ syn match   dtdEntity		      "&[^; \t]*;" contains=dtdEntityPunct
 syn match   dtdEntityPunct  contained "[&.;]"
 
 " Strings are between quotes
-syn region dtdString    start=+"+ skip=+\\\\\|\\"+  end=+"+ contains=dtdAttrDef,dtdAttrType,dtdEnum,dtdParamEntityInst,dtdEntity,dtdCard
-syn region dtdString    start=+'+ skip=+\\\\\|\\'+  end=+'+ contains=dtdAttrDef,dtdAttrType,dtdEnum,dtdParamEntityInst,dtdEntity,dtdCard
+syn region dtdString    start=+"+ skip=+\\\\\|\\"+  end=+"+ contains=dtdAttrDef,dtdAttrType,dtdParamEntityInst,dtdEntity,dtdCard
+syn region dtdString    start=+'+ skip=+\\\\\|\\'+  end=+'+ contains=dtdAttrDef,dtdAttrType,dtdParamEntityInst,dtdEntity,dtdCard
 
 " Enumeration of elements or data between parenthesis
 "
