@@ -1,0 +1,3 @@
+#!/bin/sh
+vim $VIM_DEFAULT_ARG \
+--cmd ':so test.vim' 

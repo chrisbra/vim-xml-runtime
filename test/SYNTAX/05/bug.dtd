@@ -1,0 +1,16 @@
+<!-- `bug.dtd` - Demonstrate problem in `dtd.vim` -->
+
+<!ENTITY % nice-grp "(a|b|c)" >
+
+<!-- At this point, highlighting is fine. -->
+
+<!ENTITY gotcha "(" >
+
+<!-- From here on, highlighting is botched.
+          But all is nice again if the LEFT PARENTHESIS in `gotcha`
+
+     -   is either replaced with LEFT SQUARE BRACKET for example, or
+     -   is given as a character reference `&#40;`, or
+     -   is balanced out with a following RIGHT PARENTHESIS.         -->
+
+<!ELEMENT look-bad (foo,bar,%nice-grp;*) >
