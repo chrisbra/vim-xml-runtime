@@ -168,6 +168,10 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         endif
     endif
 
+    if curline =~ '^\s*</[a-zA-Z_]>'
+        return <SID>ReturnIndentForMatchingTag(curline)
+    endif
+
     " Get indent from previous tag line
     let ind = <SID>XmlIndentSum(pline, -1, pind)
     " Determine indent from current line
@@ -188,6 +192,21 @@ endfunc
 func! <SID>IsXMLEmptyClosingTag(line)
     " Checks whether the line ends with an empty closing tag such as <lb/>
     return a:line =~? '<[^>]*/>\s*$'
+endfunc
+
+func! <SID>ReturnIndentForMatchingTag(line)
+    " For a line with just a simple closing tag
+    " get the indent from a matching opening tag
+    if a:line =~? '^\s*</[a-z_]*>'
+        let _c = getcursorpos()
+        let pat = matchstr(a:line, '^\s*</\zs[a-z_]\+\ze>')
+        " position cursor before the opening tag
+        norm! 0
+        " get the indent from the matching opening tag
+        let match_line = searchpair('<' .. pat .. '>', '', '</' .. pat .. '>', 'bn')
+        call setpos('.', _c)
+        return indent(match_line)
+    endif
 endfunc
 
 " return indent for a commented line,
