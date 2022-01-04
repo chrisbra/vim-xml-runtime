@@ -88,7 +88,9 @@ endfun
 
 " [-- return the sum of indents of a:lnum --]
 fun! <SID>XmlIndentSum(line, style, add)
-    if <SID>IsXMLContinuation(a:line) && a:style == 0 && !<SID>IsXMLEmptyClosingTag(a:line)
+    if <SID>IsXMLContinuation(a:line) &&
+        \ a:style == 0 &&
+        \ !<SID>IsXMLEmptyClosingTag(a:line)
         " no complete tag, add one additional indent level
         " but only for the current line
         return a:add + shiftwidth()
@@ -156,6 +158,13 @@ fun! XmlIndentGet(lnum, use_syntax_check)
         else
             " no extra indent, looks like a text continuation line
            return pind
+        endif
+    elseif empty(syn_name_start) && syn_name_end =~? 'xmlTag'
+        " Special case: such a line, shouldn't be indented, just because it
+        " ends with a tag
+        " 'foobar <i>inline tags</i>'
+        if (match(curline, '<\([:a-zA-Z_]\+\)[^>]*>.*</\1>') > -1)
+            return pind
         endif
     endif
 
