@@ -82,6 +82,8 @@ func! xmlformat#Format() abort
           "for y in t[1:]
             let result+=s:FormatContent(t[1:])
           "endfor
+        elseif s:IsComment(item)
+          let result+=s:FormatContent([item])
         else
           call add(result, s:Indent(item))
         endif
