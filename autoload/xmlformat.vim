@@ -79,9 +79,11 @@ func! xmlformat#Format() abort
           if s:EndTag(t[1])
             call s:DecreaseIndent()
           endif
-          "for y in t[1:]
-            let result+=s:FormatContent(t[1:])
-          "endfor
+          let result+=s:FormatContent(t[1:])
+          if s:IsTag(t[1])
+            let lastitem = t[1]
+            continue
+          endif
         elseif s:IsComment(item)
           let result+=s:FormatContent([item])
         else

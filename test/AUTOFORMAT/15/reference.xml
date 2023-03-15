@@ -1,0 +1,11 @@
+<wsdl:operation name="Update_Employee_Personal_Info">
+  <wsdl:documentation>
+    This operation updates Personal (e.g. Biographic, Demographic, etc.)
+    information related to an Employee.
+    <wd:Deprecated>    1  </wd:Deprecated>
+  </wsdl:documentation>
+  <wsdl:input name="Update_Employee_Personal_InfoInput" message="wd-wsdl:Employee_Personal_Info_UpdateInputMsg"/>
+  <wsdl:output name="Update_Employee_Personal_InfoOutput" message="wd-wsdl:Update_Employee_Personal_InfoOutputMsg"/>
+  <wsdl:fault name="Validation_Fault" message="wd-wsdl:Validation_FaultMsg"/>
+  <wsdl:fault name="Processing_Fault" message="wd-wsdl:Processing_FaultMsg"/>
+</wsdl:operation>
