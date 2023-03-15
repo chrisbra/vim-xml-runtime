@@ -96,7 +96,7 @@ func! xmlformat#Format() abort
   if !empty(result)
     let lastprevline = getline(v:lnum + count_orig)
     let delete_lastline = v:lnum + count_orig - 1 == line('$')
-    exe v:lnum. ",". (v:lnum + count_orig - 1). 'd'
+    exe 'silent ' .. v:lnum. ",". (v:lnum + count_orig - 1). 'd'
     call append(v:lnum - 1, result)
     " Might need to remove the last line, if it became empty because of the
     " append() call
