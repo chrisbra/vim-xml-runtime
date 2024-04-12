@@ -57,8 +57,14 @@ if (has("gui_win32") || has("gui_gtk")) && !exists("b:browsefilter")
 endif
 
 " Undo the stuff we changed.
-let b:undo_ftplugin = "setlocal commentstring< comments< formatoptions< formatexpr< " .
-    \     " | unlet! b:match_ignorecase b:match_words b:browsefilter"
+let b:undo_ftplugin = "setlocal commentstring< comments< formatoptions< formatexpr<"
+
+if expand('%:t') ==# 'default.xml'
+    " https://github.com/LineageOS/android/blob/aa01966efc6b81db9e8301b24cff64ade113a684/default.xml#L1136-L1137
+    setlocal include=<include\\s*name=
+    let b:undo_ftplugin .= ' inc<'
+endif
+let b:undo_ftplugin .= " | unlet! b:match_ignorecase b:match_words b:browsefilter"
 
 " Restore the saved compatibility options.
 let &cpo = s:save_cpo
