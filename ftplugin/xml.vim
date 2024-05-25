@@ -1,10 +1,11 @@
 " Vim filetype plugin file
 "     Language:	xml
 "   Maintainer:	Christian Brabandt <cb@256bit.org>
-" Last Changed: Dec 07th, 2018
-"   Repository: https://github.com/chrisbra/vim-xml-ftplugin
-" Previous Maintainer:	Dan Sharp <dwsharp at users dot sourceforge dot net>
-"          URL:		      http://dwsharp.users.sourceforge.net/vim/ftplugin
+" Last Changed:	2024 May 24
+"   Repository:	https://github.com/chrisbra/vim-xml-ftplugin
+" Previously
+"    Maintainer:	Dan Sharp <dwsharp at users dot sourceforge dot net>
+"    URL:		http://dwsharp.users.sourceforge.net/vim/ftplugin
 
 if exists("b:did_ftplugin") | finish | endif
 let b:did_ftplugin = 1
@@ -14,7 +15,7 @@ let b:did_ftplugin = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-setlocal commentstring=<!--%s-->
+setlocal commentstring=<!--\ %s\ -->
 " Remove the middlepart from the comments section, as this causes problems:
 " https://groups.google.com/d/msg/vim_dev/x4GT-nqa0Kg/jvtRnEbtAnMJ
 setlocal comments=s:<!--,e:-->
