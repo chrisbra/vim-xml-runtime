@@ -37,9 +37,10 @@ func! xmlformat#Format() abort
     " Keep empty input lines?
     if empty(line)
       call add(result, '')
+      let current += 1
       continue
     elseif line !~# '<[/]\?[^>]*>'
-      let nextmatch = match(list, '<[/]\?[^>]*>', current)
+      let nextmatch = match(list, '^\s*$\|<[/]\?[^>]*>', current)
       if nextmatch > -1
         let lineEnd = nextmatch
       else
