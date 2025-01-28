@@ -40,10 +40,13 @@ func! xmlformat#Format() abort
       continue
     elseif line !~# '<[/]\?[^>]*>'
       let nextmatch = match(list, '<[/]\?[^>]*>', current)
-      if nextmatch > -1 
-        let line .= ' '. join(list[(current + 1):(nextmatch-1)], " ")
-        call remove(list, current+1, nextmatch-1)
+      if nextmatch > -1
+        let lineEnd = nextmatch
+      else
+        let lineEnd = len(list)
       endif
+      let line .= ' '. join(list[(current + 1):(lineEnd-1)], " ")
+      call remove(list, current+1, lineEnd-1)
     endif
     " split on `>`, but don't split on very first opening <
     " this means, items can be like ['<tag>', 'tag content</tag>']
