@@ -14,5 +14,5 @@ clean:
 
 submit:
 	@echo "Set environment variable '\$$MSG' to the tag message, like this:"
-	@echo "MSG='My tag message'"
+	@echo "export MSG=\"vim-xml-runtime: Release \`date +'%Y%m%d'\`. Submitted for inclusion with next Vim release\""
 	@echo "git tag -f -s \`date +'%Y%m%d'\` -m \"\$$MSG\""
