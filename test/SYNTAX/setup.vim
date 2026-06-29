@@ -4,23 +4,10 @@ set rtp^=$VIM_XML_RT
 
 " global Variables
 let g:skipped='SKIPPED'
-let g:SourceFilename='XSyntest.vim'
+let g:SourceFilename='test.vim'
 let g:dumpname='output.dump'
 
 " helper functions
-function! NewWindow(height, width) abort
-  exe a:height . 'new'
-  exe a:width . 'vsp'
-  set winfixwidth winfixheight
-  redraw!
-endfunction
-
-function! CleanUpFiles(files) abort
-  for file in a:files
-    call delete(file)
-  endfor
-endfunction
-
 func RunVimInTerminal(arguments, options)
   " If Vim doesn't exit a swap file remains, causing other tests to fail.
   " Remove it here.
@@ -46,7 +33,7 @@ func RunVimInTerminal(arguments, options)
 	\ })
 
   " Need to sleep for about half a second
-  sleep 1
+  sleep 500ms
   return buf
 endfunc
 
@@ -57,7 +44,15 @@ func StopVimInTerminal(buf)
   call term_sendkeys(a:buf, "\<C-O>:\<C-U>qa!\<cr>")
 
   sleep 10ms
-  only!
+endfunc
+
+func RunSyntaxTest(options)
+  let buf = RunVimInTerminal('--clean -S ' .. g:SourceFilename, a:options)
+  call term_sendkeys(buf, ":redraw!\<cr>")
+  call term_wait(buf, 100)
+  call term_dumpwrite(buf, g:dumpname)
+  " clean up
+  call StopVimInTerminal(buf)
 endfunc
 
 func Skip(message, filename)
@@ -67,7 +62,9 @@ func Skip(message, filename)
 endfunc
 
 " just in case
-call CleanUpFiles([g:SourceFilename, g:dumpname, g:skipped])
+call delete(g:dumpname)
+call delete(g:skipped)
+
 if !has("terminal") || v:version < 802
   call Skip("Terminal not supported, skipping!", g:skipped)
 endif

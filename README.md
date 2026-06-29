@@ -6,6 +6,8 @@ The official XML runtime files for Vim. They include:
 * XML [indent script][2]
 * XML [format script][3]
 * XML [syntax script][4]
+* XSLT [syntax script][6]
+* XSD [syntax script][7]
 
 Once in a while, a snapshot from here will be send to Bram for inclusion and distribution with [Vim][5]
 
@@ -38,3 +40,5 @@ __NO WARRANTY, EXPRESS OR IMPLIED.  USE AT-YOUR-OWN-RISK__
 [3]: https://github.com/chrisbra/vim-xml-ftplugin/blob/master/autoload/xmlformat.vim
 [4]: https://github.com/chrisbra/vim-xml-ftplugin/blob/master/syntax/xml.vim
 [5]: https://www.github.com/vim/vim
+[6]: https://github.com/chrisbra/vim-xml-ftplugin/blob/master/syntax/xslt.vim
+[7]: https://github.com/chrisbra/vim-xml-ftplugin/blob/master/syntax/xsd.vim

@@ -1,3 +1,5 @@
 #!/bin/sh
 vim $VIM_DEFAULT_ARG \
---cmd ':so test.vim' 
+  --cmd ':so ../setup.vim' \
+  --cmd 'call RunSyntaxTest({ "rows": 5, "cols": 40 })' \
+  --cmd 'qa!'
