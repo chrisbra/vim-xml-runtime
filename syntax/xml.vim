@@ -4,13 +4,14 @@
 " Repository: https://github.com/chrisbra/vim-xml-ftplugin
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
 " Author: Paul Siegmann <pauls@euronet.nl>
-" Last Changed:	Nov 03, 2019
+" Last Changed:	30 Jun 2026
 " Filenames:	*.xml
 " Last Change:
 " 20190923 - Fix xmlEndTag to match xmlTag (vim/vim#884)
 " 20190924 - Fix xmlAttribute property (amadeus/vim-xml@d8ce1c946)
 " 20191103 - Enable spell checking globally
 " 20210428 - Improve syntax synchronizing
+" 20260630 - Improve performance
 
 " CONFIGURATION:
 "   syntax folding can be turned on by
@@ -109,14 +110,25 @@ syn match   xmlAttrib
 "
 if exists("g:xml_namespace_transparent")
 syn match   xmlNamespace
-    \ +\(<\|</\)\@2<=[^ /!?<>"':]\+[:]\@=+
+    \ +<[^ /!?<>"':]\+[:]\@=+lc=1
+    \ contained
+    \ contains=@xmlNamespaceHook
+    \ transparent
+    \ display
+syn match   xmlNamespace
+    \ +</[^ /!?<>"':]\+[:]\@=+lc=2
     \ contained
     \ contains=@xmlNamespaceHook
     \ transparent
     \ display
 else
 syn match   xmlNamespace
-    \ +\(<\|</\)\@2<=[^ /!?<>"':]\+[:]\@=+
+    \ +<[^ /!?<>"':]\+[:]\@=+lc=1
+    \ contained
+    \ contains=@xmlNamespaceHook
+    \ display
+syn match   xmlNamespace
+    \ +</[^ /!?<>"':]\+[:]\@=+lc=2
     \ contained
     \ contains=@xmlNamespaceHook
     \ display
@@ -133,7 +145,12 @@ endif
 "  ^^^
 "
 syn match   xmlTagName
-    \ +\%(<\|</\)\@2<=[^ /!?<>"']\++
+    \ +<[^ /!?<>"']\++lc=1
+    \ contained
+    \ contains=xmlNamespace,xmlAttribPunct,@xmlTagHook
+    \ display
+syn match   xmlTagName
+    \ +</[^ /!?<>"']\++lc=2
     \ contained
     \ contains=xmlNamespace,xmlAttribPunct,@xmlTagHook
     \ display
