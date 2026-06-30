@@ -100,6 +100,12 @@ syn match   xmlAttrib
     \ display
 
 
+if exists("g:xml_namespace_transparent")
+    command! -nargs=+ XmlTransparent <args> transparent
+else
+    command! -nargs=+ XmlTransparent <args>
+endif
+
 " namespace spec
 "
 " PROVIDES: @xmlNamespaceHook
@@ -109,31 +115,18 @@ syn match   xmlAttrib
 " <xsl:for-each select = "lola">
 "  ^^^
 "
-if exists("g:xml_namespace_transparent")
-syn match   xmlNamespace
-    \ +<[^ /!?<>"':]\+\ze:+lc=1
-    \ contained
-    \ contains=@xmlNamespaceHook
-    \ transparent
-    \ display
-syn match   xmlNamespace
-    \ +</[^ /!?<>"':]\+\ze:+lc=2
-    \ contained
-    \ contains=@xmlNamespaceHook
-    \ transparent
-    \ display
-else
-syn match   xmlNamespace
+XmlTransparent syn match   xmlNamespace
     \ +<[^ /!?<>"':]\+\ze:+lc=1
     \ contained
     \ contains=@xmlNamespaceHook
     \ display
-syn match   xmlNamespace
+XmlTransparent syn match   xmlNamespace
     \ +</[^ /!?<>"':]\+\ze:+lc=2
     \ contained
     \ contains=@xmlNamespaceHook
     \ display
-endif
+
+delcommand XmlTransparent
 
 
 " tag name
@@ -158,40 +151,48 @@ syn match   xmlTagName
 
 
 if exists('g:xml_syntax_folding')
+    command! -nargs=+ XmlContained <args> contained
+    command! -nargs=+ XmlFold <args> fold
+else
+    command! -nargs=+ XmlContained <args>
+    command! -nargs=+ XmlFold <args>
+endif
 
-    " start tag
-    " use matchgroup=xmlTag to skip over the leading '<'
-    "
-    " PROVIDES: @xmlStartTagHook
-    "
-    " EXAMPLE:
-    "
-    " <tag id="whoops">
-    " s^^^^^^^^^^^^^^^e
-    "
-    syn region   xmlTag
+" start tag
+" use matchgroup=xmlTag to skip over the leading '<'
+"
+" PROVIDES: @xmlStartTagHook
+"
+" EXAMPLE:
+"
+" <tag id="whoops">
+" s^^^^^^^^^^^^^^^e
+"
+XmlContained syn region   xmlTag
 	\ matchgroup=xmlTag start=+<\ze[^ /!?<>"']+
 	\ matchgroup=xmlTag end=+>+
-	\ contained
 	\ contains=xmlError,xmlTagName,xmlAttrib,xmlEqual,xmlString,@xmlStartTagHook
 
 
-    " highlight the end tag
-    "
-    " PROVIDES: @xmlTagHook
-    " (should we provide a separate @xmlEndTagHook ?)
-    "
-    " EXAMPLE:
-    "
-    " </tag>
-    " ^^^^^^
-    "
-    syn region   xmlEndTag
+" highlight the end tag
+"
+" PROVIDES: @xmlTagHook
+" (should we provide a separate @xmlEndTagHook ?)
+"
+" EXAMPLE:
+"
+" </tag>
+" ^^^^^^
+"
+XmlContained syn region   xmlEndTag
 	\ matchgroup=xmlTag start=+</\ze[^ /!?<>"']+
 	\ matchgroup=xmlTag end=+>+
-	\ contained
 	\ contains=xmlTagName,xmlNamespace,xmlAttribPunct,@xmlTagHook
 
+delcommand XmlContained
+
+
+if exists('g:xml_syntax_folding')
     " tag elements with syntax-folding.
     " NOTE: NO HIGHLIGHTING -- highlighting is done by contained elements
     "
@@ -215,23 +216,6 @@ if exists('g:xml_syntax_folding')
 	\ contains=xmlTag,xmlEndTag,xmlCdata,xmlRegion,xmlComment,xmlEntity,xmlProcessing,@xmlRegionHook,@Spell
 	\ keepend
 	\ extend
-
-else
-
-    " no syntax folding:
-    " - contained attribute removed
-    " - xmlRegion not defined
-    "
-    syn region   xmlTag
-	\ matchgroup=xmlTag start=+<\ze[^ /!?<>"']+
-	\ matchgroup=xmlTag end=+>+
-	\ contains=xmlError,xmlTagName,xmlAttrib,xmlEqual,xmlString,@xmlStartTagHook
-
-    syn region   xmlEndTag
-	\ matchgroup=xmlTag start=+</\ze[^ /!?<>"']+
-	\ matchgroup=xmlTag end=+>+
-	\ contains=xmlTagName,xmlNamespace,xmlAttribPunct,@xmlTagHook
-
 endif
 
 
@@ -239,29 +223,13 @@ endif
 syn match   xmlEntity                 "&[^; \t]*;" contains=xmlEntityPunct
 syn match   xmlEntityPunct  contained "[&.;]"
 
-if exists('g:xml_syntax_folding')
-
-    " The real comments (this implements the comments as defined by xml,
-    " but not all xml pages actually conform to it. Errors are flagged.
-    syn region  xmlComment
+" The real comments (this implements the comments as defined by xml,
+" but not all xml pages actually conform to it. Errors are flagged.
+XmlFold syn region  xmlComment
 	\ start=+<!+
 	\ end=+>+
 	\ contains=xmlCommentStart,xmlCommentError
 	\ extend
-	\ fold
-
-else
-
-    " no syntax folding:
-    " - fold attribute removed
-    "
-    syn region  xmlComment
-	\ start=+<!+
-	\ end=+>+
-	\ contains=xmlCommentStart,xmlCommentError
-	\ extend
-
-endif
 
 syn match xmlCommentStart   contained "<!" nextgroup=xmlCommentPart
 syn keyword xmlTodo         contained TODO FIXME XXX
@@ -296,23 +264,12 @@ syn match    xmlCdataEnd   +]]>+          contained
 syn region  xmlProcessing matchgroup=xmlProcessingDelim start="<?" end="?>" contains=xmlAttrib,xmlEqual,xmlString
 
 
-if exists('g:xml_syntax_folding')
-
-    " DTD -- we use dtd.vim here
-    syn region  xmlDocType matchgroup=xmlDocTypeDecl
-	\ start="<!DOCTYPE"he=s+2,rs=s+2 end=">"
-	\ fold
-	\ contains=xmlDocTypeKeyword,xmlInlineDTD,xmlString
-else
-
-    " no syntax folding:
-    " - fold attribute removed
-    "
-    syn region  xmlDocType matchgroup=xmlDocTypeDecl
+" DTD -- we use dtd.vim here
+XmlFold syn region  xmlDocType matchgroup=xmlDocTypeDecl
 	\ start="<!DOCTYPE"he=s+2,rs=s+2 end=">"
 	\ contains=xmlDocTypeKeyword,xmlInlineDTD,xmlString
 
-endif
+delcommand XmlFold
 
 syn keyword xmlDocTypeKeyword contained DOCTYPE PUBLIC SYSTEM
 syn region  xmlInlineDTD contained matchgroup=xmlDocTypeDecl start="\[" end="]" contains=@xmlDTD
