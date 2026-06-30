@@ -110,25 +110,25 @@ syn match   xmlAttrib
 "
 if exists("g:xml_namespace_transparent")
 syn match   xmlNamespace
-    \ +<[^ /!?<>"':]\+[:]\@=+lc=1
+    \ +<[^ /!?<>"':]\+\ze:+lc=1
     \ contained
     \ contains=@xmlNamespaceHook
     \ transparent
     \ display
 syn match   xmlNamespace
-    \ +</[^ /!?<>"':]\+[:]\@=+lc=2
+    \ +</[^ /!?<>"':]\+\ze:+lc=2
     \ contained
     \ contains=@xmlNamespaceHook
     \ transparent
     \ display
 else
 syn match   xmlNamespace
-    \ +<[^ /!?<>"':]\+[:]\@=+lc=1
+    \ +<[^ /!?<>"':]\+\ze:+lc=1
     \ contained
     \ contains=@xmlNamespaceHook
     \ display
 syn match   xmlNamespace
-    \ +</[^ /!?<>"':]\+[:]\@=+lc=2
+    \ +</[^ /!?<>"':]\+\ze:+lc=2
     \ contained
     \ contains=@xmlNamespaceHook
     \ display
@@ -169,7 +169,7 @@ if exists('g:xml_syntax_folding')
     " s^^^^^^^^^^^^^^^e
     "
     syn region   xmlTag
-	\ matchgroup=xmlTag start=+<[^ /!?<>"']\@=+
+	\ matchgroup=xmlTag start=+<\ze[^ /!?<>"']+
 	\ matchgroup=xmlTag end=+>+
 	\ contained
 	\ contains=xmlError,xmlTagName,xmlAttrib,xmlEqual,xmlString,@xmlStartTagHook
@@ -186,7 +186,7 @@ if exists('g:xml_syntax_folding')
     " ^^^^^^
     "
     syn region   xmlEndTag
-	\ matchgroup=xmlTag start=+</[^ /!?<>"']\@=+
+	\ matchgroup=xmlTag start=+</\ze[^ /!?<>"']+
 	\ matchgroup=xmlTag end=+>+
 	\ contained
 	\ contains=xmlTagName,xmlNamespace,xmlAttribPunct,@xmlTagHook
@@ -222,12 +222,12 @@ else
     " - xmlRegion not defined
     "
     syn region   xmlTag
-	\ matchgroup=xmlTag start=+<[^ /!?<>"']\@=+
+	\ matchgroup=xmlTag start=+<\ze[^ /!?<>"']+
 	\ matchgroup=xmlTag end=+>+
 	\ contains=xmlError,xmlTagName,xmlAttrib,xmlEqual,xmlString,@xmlStartTagHook
 
     syn region   xmlEndTag
-	\ matchgroup=xmlTag start=+</[^ /!?<>"']\@=+
+	\ matchgroup=xmlTag start=+</\ze[^ /!?<>"']+
 	\ matchgroup=xmlTag end=+>+
 	\ contains=xmlTagName,xmlNamespace,xmlAttribPunct,@xmlTagHook
 
