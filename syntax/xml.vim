@@ -94,7 +94,7 @@ syn match   xmlEqual +=+ display
 "      ^^^^^^^^^^^^^
 "
 syn match   xmlAttrib
-    \ +\%#=1[-'"<]\@1<!\<[a-zA-Z:_][-.0-9a-zA-Z:_]*\>['"]\@!+
+    \ +\%#=1[-/!?<>"']\@1<!\<[a-zA-Z:_][-.0-9a-zA-Z:_]*\>['"]\@!+
     \ contained
     \ contains=xmlAttribPunct,@xmlAttribHook
     \ display
