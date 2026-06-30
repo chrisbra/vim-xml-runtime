@@ -62,7 +62,8 @@ syn case match
 syn spell toplevel
 
 " mark illegal characters
-syn match xmlError "[<&]"
+syn match xmlError "<"
+syn match xmlError "&"
 
 " strings (inside tags) aka VALUES
 "
