@@ -2,8 +2,10 @@
 " Maintainer: Christian Brabandt <cb@256bit.org>
 " Repository: https://github.com/chrisbra/vim-xml-ftplugin
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
-" Last Changed: 2020 Nov 4th
+" Last Changed: 2023 January 7th
 " Last Change:
+" 20230107 - Handle CData tags without increasing indent
+"            https://github.com/chrisbra/vim-xml-runtime/issues/37
 " 20200529 - Handle empty closing tags correctly
 " 20191202 - Handle docbk filetype
 " 20190726 - Correctly handle non-tagged data
@@ -53,6 +55,14 @@ if !exists('b:xml_indent_close')
     " let b:xml_indent_close = '.\{-}</\(address\)\@!'
 endif
 
+if !exists('b:xml_cdata_open')
+    let b:xml_cdata_open = '.\{-}<![CDATA\['
+endif
+
+if !exists('b:xml_cdata_close')
+    let b:xml_cdata_close = '.\{-}\]\]/>.\{-}'
+endif
+
 if !exists('b:xml_indent_continuation_filetype')
     let b:xml_indent_continuation_filetype = 'xml'
 endif
@@ -94,13 +104,14 @@ fun! <SID>XmlIndentSum(line, style, add)
         " no complete tag, add one additional indent level
         " but only for the current line
         return a:add + shiftwidth()
-    elseif <SID>HasNoTagEnd(a:line)
-        " no complete tag, return initial indent
+    elseif <SID>HasNoTagEnd(a:line) || <SID>HasXMLCDataTag(a:line)
+        " no complete free-standing tag, return initial indent
         return a:add
     endif
     if a:style == match(a:line, '^\s*</')
         return (shiftwidth() *
         \  (<SID>XmlIndentWithPattern(a:line, b:xml_indent_open)
+        \ - <SID>XmlIndentWithPattern(a:line, b:xml_cdata_open)
         \ - <SID>XmlIndentWithPattern(a:line, b:xml_indent_close)
         \ - <SID>XmlIndentWithPattern(a:line, '.\{-}/>'))) + a:add
     else
@@ -192,6 +203,11 @@ endfunc
 func! <SID>IsXMLEmptyClosingTag(line)
     " Checks whether the line ends with an empty closing tag such as <lb/>
     return a:line =~? '<[^>]*/>\s*$'
+endfunc
+
+func! <SID>HasXMLCDataTag(line)
+    " Checks whether the line is a CData tag: <![CDATA[]]>
+    return a:line =~? b:xml_cdata_open + b:xml_cdata_close
 endfunc
 
 func! <SID>ReturnIndentForMatchingTag(line)
