@@ -2,8 +2,10 @@
 " Maintainer: Christian Brabandt <cb@256bit.org>
 " Repository: https://github.com/chrisbra/vim-xml-ftplugin
 " Previous Maintainer: Johannes Zellner <johannes@zellner.org>
-" Last Changed: 2020 Nov 4th
+" Last Changed: 2022 May 18th
 " Last Change:
+" 20220518 - Indent closing tag correctly when opening tag spans multiple
+"            lines https://github.com/chrisbra/vim-xml-ftplugin/issues/31
 " 20200529 - Handle empty closing tags correctly
 " 20191202 - Handle docbk filetype
 " 20190726 - Correctly handle non-tagged data
@@ -87,13 +89,18 @@ fun! <SID>XmlIndentSynCheck(lnum)
 endfun
 
 " [-- return the sum of indents of a:lnum --]
-fun! <SID>XmlIndentSum(line, style, add)
+fun! <SID>XmlIndentSum(line, style, add, ...)
     if <SID>IsXMLContinuation(a:line) &&
         \ a:style == 0 &&
         \ !<SID>IsXMLEmptyClosingTag(a:line)
         " no complete tag, add one additional indent level
         " but only for the current line
         return a:add + shiftwidth()
+    elseif a:0 && a:line =~ '^\s*<[^/]' && a:1 =~ '^\s*<[^/]' && a:1 !~ '>\s*$'
+                \ && getline(prevnonblank(a:2-1)) !~ '/\s*>\s*$'
+        return a:add + shiftwidth()
+    elseif a:0 && a:line =~ '^\s*</' && a:1 =~ '^\s*<' && a:1 !~ '>\s*$'
+        return a:add
     elseif <SID>HasNoTagEnd(a:line)
         " no complete tag, return initial indent
         return a:add
@@ -175,7 +182,7 @@ fun! XmlIndentGet(lnum, use_syntax_check)
     " Get indent from previous tag line
     let ind = <SID>XmlIndentSum(pline, -1, pind)
     " Determine indent from current line
-    let ind = <SID>XmlIndentSum(curline, 0, ind)
+    let ind = <SID>XmlIndentSum(curline, 0, ind, pline, a:lnum)
     return ind
 endfun
 
