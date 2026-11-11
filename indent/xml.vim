@@ -198,7 +198,7 @@ func! <SID>ReturnIndentForMatchingTag(line)
     " For a line with just a simple closing tag
     " get the indent from a matching opening tag
     if a:line =~? '^\s*</[a-z_]*>'
-        let _c = getcursorpos()
+        let _c = getcurpos()
         let pat = matchstr(a:line, '^\s*</\zs[a-z_]\+\ze>')
         " position cursor before the opening tag
         norm! 0
